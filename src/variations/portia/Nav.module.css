@@ -1,0 +1,151 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--p-nav-h);
+  display: flex;
+  align-items: center;
+  background: rgba(18, 18, 18, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--p-line);
+}
+
+.inner {
+  width: min(100%, var(--p-max));
+  margin-inline: auto;
+  padding-inline: var(--p-pad);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.logo {
+  font-family: var(--p-display);
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--p-white);
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: clamp(1rem, 2.5vw, 2.25rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.links a {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.72);
+  transition: color 0.25s ease;
+}
+
+.links a:hover,
+.links a:focus-visible {
+  color: var(--p-white);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.25rem;
+  border-radius: 999px;
+  background: var(--p-accent);
+  color: var(--p-white);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.menuBtn {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--p-line);
+  border-radius: 999px;
+}
+
+.menuBtn span,
+.menuBtn span::before,
+.menuBtn span::after {
+  display: block;
+  width: 1rem;
+  height: 1.5px;
+  background: var(--p-white);
+  position: relative;
+}
+
+.menuBtn span::before,
+.menuBtn span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.menuBtn span::before {
+  top: -5px;
+}
+
+.menuBtn span::after {
+  top: 5px;
+}
+
+.drawer {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .links {
+    display: none;
+  }
+
+  .menuBtn {
+    display: inline-flex;
+  }
+
+  .drawer {
+    display: block;
+    position: absolute;
+    inset: var(--p-nav-h) 0 auto;
+    background: var(--p-bg-elevated);
+    border-bottom: 1px solid var(--p-line);
+    padding: 1.25rem var(--p-pad) 1.5rem;
+  }
+
+  .drawer[hidden] {
+    display: none;
+  }
+
+  .drawerList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .drawerList a {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+}

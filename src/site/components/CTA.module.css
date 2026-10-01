@@ -1,0 +1,144 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 6rem 1.25rem;
+}
+
+.glow {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(900px, 95%);
+  height: 560px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.13) 0%, rgb(var(--accent-rgb) / 0.045) 46%, transparent 100%);
+  filter: blur(46px);
+}
+
+.inner {
+  margin-inline: auto;
+  max-width: 51rem;
+  text-align: center;
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(2.1rem, 5.4vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+.lead {
+  margin: 1.5rem auto 0;
+  max-width: 56ch;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--z400);
+}
+
+.ctaWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.15rem 2.25rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--shade);
+  font-size: 1.03rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 0 60px -10px rgb(var(--accent-rgb) / 0.65);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+  background: var(--z200);
+  transform: translateY(-2px);
+}
+
+.btn svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 2.25rem auto 0;
+  max-width: 46ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgb(var(--ink-rgb) / 0.6);
+}
+
+.note svg {
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.1rem;
+  color: #4ade80;
+}
+
+.noteLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--z600);
+  text-underline-offset: 4px;
+  transition: color 0.25s;
+}
+
+.noteLink:hover {
+  color: var(--ink);
+}
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.avatar + .avatar {
+  margin-left: -0.6rem;
+}
+
+.socialText {
+  font-size: 0.9rem;
+  color: var(--z400);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding: 8rem 1.25rem;
+  }
+}

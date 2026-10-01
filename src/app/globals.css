@@ -1,0 +1,114 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+  background: #ffffff;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: #0a0a0a;
+  background: #ffffff;
+  font-family: system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: #c8ff00;
+  color: #0a0a0a;
+}
+
+:focus-visible {
+  outline: 2px solid #0a0a0a;
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Legacy Veronica theme helpers */
+:root {
+  --bg: #070a10;
+  --ink: #ffffff;
+  --muted: rgba(255, 255, 255, 0.42);
+  --accent: #ffa800;
+  --cyan: #00ffe0;
+  --glow: rgba(255, 168, 0, 0.18);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --nav-h: 5rem;
+  --pad: clamp(1.25rem, 4vw, 3.75rem);
+  --max: 78rem;
+  --cursor-size: 8px;
+  --font-display: system-ui, sans-serif;
+  --font-body: system-ui, sans-serif;
+  --font-serif: Georgia, serif;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --accent-soft: rgba(255, 168, 0, 0.14);
+  --glow-cyan: rgba(0, 255, 224, 0.28);
+  --ink-soft: rgba(255, 255, 255, 0.72);
+  --surface: rgba(255, 255, 255, 0.03);
+}
+
+body.theme-veronica {
+  color: var(--ink);
+  background: var(--bg);
+}
+
+html.theme-veronica {
+  background: var(--bg);
+}
+
+body.has-custom-cursor,
+body.has-custom-cursor * {
+  cursor: none !important;
+}

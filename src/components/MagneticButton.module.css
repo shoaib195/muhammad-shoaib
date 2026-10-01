@@ -1,0 +1,61 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.9rem 1.7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.35s var(--ease-out), border-color 0.35s var(--ease-out);
+  will-change: transform;
+}
+
+.primary {
+  color: #070a10;
+  background: #fff;
+  border: 1px solid #fff;
+}
+
+.primary:hover {
+  color: #fff;
+}
+
+.primary .shine {
+  background: #070a10;
+}
+
+.ghost {
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+}
+
+.ghost:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.ghost .shine {
+  background: rgba(0, 255, 224, 0.08);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+}
+
+.shine {
+  position: absolute;
+  inset: 0;
+  transform: translateY(101%);
+  transition: transform 0.45s var(--ease-out);
+}
+
+.btn:hover .shine {
+  transform: translateY(0);
+}

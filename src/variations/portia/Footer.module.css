@@ -1,0 +1,136 @@
+.footer {
+  background: var(--p-bg);
+  color: var(--p-white);
+  padding: clamp(4rem, 9vw, 6.5rem) var(--p-pad) 2rem;
+}
+
+.inner {
+  width: min(100%, var(--p-max));
+  margin-inline: auto;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  border-bottom: 1px solid var(--p-line);
+}
+
+.brand {
+  margin: 0 0 1rem;
+  font-family: var(--p-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+}
+
+.tag {
+  margin: 0;
+  max-width: 28ch;
+  color: var(--p-muted);
+  line-height: 1.6;
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-content: start;
+}
+
+.nav a {
+  font-family: var(--p-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  transition: color 0.25s ease;
+}
+
+.nav a:hover,
+.nav a:focus-visible {
+  color: var(--p-accent);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(2rem, 4vw, 3rem) 0;
+  border-bottom: 1px solid var(--p-line);
+}
+
+.blockTitle {
+  margin: 0 0 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--p-accent);
+}
+
+.contactLine {
+  margin: 0 0 0.45rem;
+  font-size: 1.05rem;
+}
+
+.contactLine a:hover,
+.contactLine a:focus-visible {
+  color: var(--p-accent);
+}
+
+.address {
+  margin: 0.85rem 0 0;
+  max-width: 28ch;
+  color: var(--p-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.socials a {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.25s ease;
+}
+
+.socials a:hover,
+.socials a:focus-visible {
+  color: var(--p-accent);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 1.5rem;
+}
+
+.copy,
+.note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 800px) {
+  .top,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+}

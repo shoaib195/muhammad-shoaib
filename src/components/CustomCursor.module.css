@@ -1,0 +1,31 @@
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  margin: calc(var(--cursor-size) / -2) 0 0 calc(var(--cursor-size) / -2);
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition:
+    width 0.28s var(--ease-out),
+    height 0.28s var(--ease-out),
+    margin 0.28s var(--ease-out),
+    background 0.28s var(--ease-out);
+}
+
+.hover {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .cursor {
+    display: none;
+  }
+}

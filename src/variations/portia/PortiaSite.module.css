@@ -1,0 +1,38 @@
+.site {
+  --p-bg: #121212;
+  --p-bg-elevated: #1a1a1a;
+  --p-white: #ffffff;
+  --p-surface: #f5f5f5;
+  --p-surface-2: #efefef;
+  --p-accent: #e85a3c;
+  --p-accent-soft: rgba(232, 90, 60, 0.18);
+  --p-ink: #121212;
+  --p-muted: rgba(255, 255, 255, 0.62);
+  --p-muted-dark: rgba(18, 18, 18, 0.55);
+  --p-line: rgba(255, 255, 255, 0.12);
+  --p-line-dark: rgba(18, 18, 18, 0.1);
+  --p-display: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+  --p-body: var(--font-portia-body), var(--font-manrope), system-ui, sans-serif;
+  --p-pad: clamp(1.25rem, 4vw, 4.5rem);
+  --p-max: 76rem;
+  --p-nav-h: 4.5rem;
+
+  position: relative;
+  min-height: 100vh;
+  color: var(--p-white);
+  background:
+    radial-gradient(ellipse 70% 45% at 85% 8%, rgba(232, 90, 60, 0.16), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 10% 20%, rgba(255, 180, 160, 0.1), transparent 50%),
+    radial-gradient(ellipse 60% 35% at 50% 100%, rgba(232, 90, 60, 0.08), transparent 55%),
+    var(--p-bg);
+  font-family: var(--p-body);
+  overflow-x: clip;
+}
+
+.site * {
+  box-sizing: border-box;
+}
+
+.main {
+  display: block;
+}

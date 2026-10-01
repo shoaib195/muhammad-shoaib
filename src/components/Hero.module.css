@@ -1,0 +1,242 @@
+.hero {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 1rem) var(--pad) 2.5rem;
+  display: flex;
+  align-items: center;
+  overflow: clip;
+}
+
+.parallaxGlow {
+  pointer-events: none;
+  position: absolute;
+  width: min(70vw, 46rem);
+  height: min(70vw, 46rem);
+  left: 18%;
+  top: 28%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 224, 0.18),
+    rgba(40, 90, 255, 0.08) 40%,
+    transparent 68%
+  );
+  filter: blur(30px);
+  transform: translate3d(
+    calc(var(--px) * 28px),
+    calc(var(--py) * 20px),
+    0
+  );
+  transition: transform 0.45s var(--ease-out);
+  z-index: 0;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  min-height: calc(100svh - var(--nav-h) - 3.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 4.5rem;
+}
+
+.title {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(0.15rem, 1vw, 0.45rem);
+  width: 100%;
+}
+
+.lineMask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.lineMask > span {
+  display: block;
+  will-change: transform;
+}
+
+.wordCreative {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3.2rem, 11.5vw, 8.5rem);
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  color: #fff;
+  margin-left: clamp(0rem, 2vw, 1.5rem);
+}
+
+.lineRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(0.65rem, 2.2vw, 1.6rem);
+  margin-left: clamp(1.5rem, 12vw, 9rem);
+  width: calc(100% - clamp(1.5rem, 12vw, 9rem));
+}
+
+.wordVisualWrap {
+  display: block;
+}
+
+.wordVisual {
+  display: inline-block;
+  font-size: clamp(2.4rem, 7.5vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  transform: translate3d(calc(var(--px) * -8px), calc(var(--py) * -6px), 0);
+  transition: transform 0.55s var(--ease-out);
+}
+
+.wordDesigner {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(3.4rem, 12vw, 9rem);
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: #fff;
+}
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.metaLeft,
+.metaCenter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.metaLeft p,
+.metaCenter p {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  max-width: 22rem;
+  line-height: 1.55;
+}
+
+.metaCenter {
+  justify-self: center;
+  text-align: center;
+}
+
+.scroll {
+  width: 2.5rem;
+  height: 3.25rem;
+  display: grid;
+  place-items: end center;
+  justify-self: end;
+  opacity: 0.75;
+  transition: opacity 0.3s;
+}
+
+.scroll:hover {
+  opacity: 1;
+}
+
+.scrollArrow {
+  width: 1px;
+  height: 2.6rem;
+  background: linear-gradient(#fff, transparent);
+  position: relative;
+  animation: scroll-pulse 2.2s var(--ease-out) infinite;
+}
+
+.scrollArrow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+@keyframes scroll-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.7);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .lineRow {
+    margin-left: 0.5rem;
+    width: auto;
+  }
+
+  .footer {
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+  }
+
+  .metaCenter {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .wordCreative {
+    margin-left: 0;
+  }
+
+  .lineRow {
+    margin-left: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .footer {
+    position: relative;
+    margin-top: 3.5rem;
+  }
+
+  .inner {
+    min-height: auto;
+    padding-bottom: 1rem;
+    justify-content: flex-end;
+    padding-top: 18vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollArrow {
+    animation: none;
+  }
+
+  .parallaxGlow,
+  .wordVisual {
+    transition: none;
+    transform: none;
+  }
+}

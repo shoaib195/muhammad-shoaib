@@ -1,0 +1,88 @@
+.section {
+  padding-bottom: clamp(4rem, 10vw, 7rem);
+}
+
+.inner {
+  position: relative;
+  padding: clamp(3.2rem, 8vw, 5.5rem) clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 80% at 85% 15%, rgba(0, 255, 224, 0.12), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(255, 168, 0, 0.08), transparent 50%),
+    rgba(255, 255, 255, 0.02);
+}
+
+.glow {
+  position: absolute;
+  width: 20rem;
+  height: 20rem;
+  left: -3rem;
+  bottom: -6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 224, 0.2), transparent 70%);
+  filter: blur(24px);
+  animation: drift 12s var(--ease-out) infinite alternate;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.title {
+  position: relative;
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.8rem, 9vw, 6.2rem);
+  font-weight: 500;
+  max-width: 12ch;
+}
+
+.sub {
+  position: relative;
+  margin: 0 0 2rem;
+  max-width: 32rem;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 1.75rem;
+}
+
+.email {
+  font-size: 0.92rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 0.15rem;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+.email:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(12%, -10%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow {
+    animation: none;
+  }
+}

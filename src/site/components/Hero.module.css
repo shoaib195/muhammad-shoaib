@@ -1,0 +1,630 @@
+.hero {
+  --portrait-mask-radial: radial-gradient(
+    ellipse 105% 115% at 50% 40%,
+    rgb(var(--shade-rgb) / 1) 0%,
+    rgb(var(--shade-rgb) / 1) 55%,
+    rgb(var(--shade-rgb) / 0.85) 66%,
+    rgb(var(--shade-rgb) / 0.6) 76%,
+    rgb(var(--shade-rgb) / 0.34) 85%,
+    rgb(var(--shade-rgb) / 0.14) 93%,
+    rgb(var(--shade-rgb) / 0) 100%
+  );
+  --portrait-mask-x: linear-gradient(
+    to right,
+    transparent 0%,
+    rgb(255 255 255 / 0.55) 4%,
+    #fff 12%
+  );
+  --portrait-mask-y: linear-gradient(
+    to top,
+    transparent 0%,
+    rgb(255 255 255 / 0.5) 4%,
+    #fff 10%
+  );
+
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  min-height: min(100svh, 54rem);
+  padding-top: 4.5rem;
+  padding-bottom: 2.5rem;
+}
+
+/* hero ambient: gradient wash behind everything so navbar melts into it */
+.hero::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(70% 55% at 18% 0%, rgb(var(--accent-rgb) / 0.16), transparent 60%),
+    radial-gradient(50% 40% at 85% 100%, rgb(var(--accent-rgb) / 0.08), transparent 70%);
+}
+
+.gridPattern {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgb(var(--ink-rgb) / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--ink-rgb) / 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image:
+    linear-gradient(to bottom, var(--shade) 70%, transparent),
+    linear-gradient(to right, var(--shade) 38%, transparent);
+  -webkit-mask-image:
+    linear-gradient(to bottom, var(--shade) 70%, transparent),
+    linear-gradient(to right, var(--shade) 38%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  opacity: 0.9;
+}
+
+/* ---- Portrait stage — full-bleed image with left-edge fade ---- */
+.portraitWrap {
+  --px: 0;
+  --py: 0;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: min(92vw, 32rem);
+  margin-top: 0.25rem;
+  overflow: hidden;
+}
+
+.portraitSharp {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: var(--portrait-mask-x), var(--portrait-mask-y);
+  mask-image: var(--portrait-mask-x), var(--portrait-mask-y);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  transform: translate3d(calc(var(--px) * 6px), calc(var(--py) * 4px), 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Soft left wash — stays on the image edge, clear of the face */
+.portraitWrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 22%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--bg) 0%,
+    rgb(var(--bg-rgb) / 0.55) 35%,
+    transparent 100%
+  );
+}
+
+.portraitImgCover {
+  object-fit: cover;
+  object-position: 62% 18%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portraitSharp {
+    transition: none;
+    transform: none;
+  }
+}
+
+.mobileFadeTop,
+.mobileFadeBottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 7rem;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.mobileFadeTop {
+  top: 0;
+  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+}
+
+.mobileFadeBottom {
+  bottom: 0;
+  background: linear-gradient(to top, var(--bg) 0%, rgb(var(--bg-rgb) / 0.6) 40%, transparent 100%);
+}
+
+/* Handwriting overlay — sits in the left fade zone of the portrait */
+.handIntro {
+  position: absolute;
+  z-index: 3;
+  top: 5.5rem;
+  margin-top: 0.75rem;
+  left: 0.85rem;
+  right: auto;
+  text-align: left;
+  pointer-events: none;
+  max-width: 18rem;
+}
+
+.handIntro > * {
+  pointer-events: auto;
+}
+
+.handSvg {
+  display: block;
+  width: min(68vw, 17rem);
+  height: auto;
+  color: var(--ink);
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  filter: drop-shadow(0 1px 10px rgb(var(--bg-rgb) / 0.8));
+}
+
+.pillBadge {
+  display: none;
+}
+
+.handArrow {
+  display: block;
+  width: 2.85rem;
+  height: auto;
+  margin: 0.25rem auto 0 1.75rem;
+  color: var(--ink);
+}
+
+/* ---- Content shell ---- */
+.shell {
+  position: relative;
+  z-index: 4;
+  width: min(100%, 80rem);
+  margin: -2.5rem auto 0;
+  padding: 0 clamp(1.15rem, 3vw, 2.5rem) 1.5rem;
+}
+
+.copy {
+  text-align: center;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+
+.proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.scribble {
+  display: none;
+  width: 1.75rem;
+  height: 2.7rem;
+  color: rgb(var(--ink-rgb) / 0.28);
+  flex-shrink: 0;
+}
+
+.scribbleFlip {
+  transform: scaleX(-1);
+}
+
+.proofPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 1rem 0.4rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+  background: rgb(var(--shade-rgb) / 0.55);
+  backdrop-filter: blur(12px);
+  font-size: 0.8125rem;
+  color: rgb(var(--ink-rgb) / 0.8);
+  white-space: nowrap;
+}
+
+.avatarStack {
+  display: flex;
+}
+
+.avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.avatar + .avatar {
+  margin-left: -0.55rem;
+}
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.rating svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: var(--accent);
+}
+
+.title {
+  margin: 0 0 1.1rem;
+  font-size: clamp(2rem, 6.5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: var(--ink);
+}
+
+.titleAccent {
+  color: var(--accent);
+}
+
+.lead {
+  margin: 0 auto 1.5rem;
+  max-width: 36rem;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: rgb(var(--ink-rgb) / 0.5);
+}
+
+.features {
+  list-style: none;
+  margin: 0 0 1.75rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  color: rgb(var(--ink-rgb) / 0.5);
+}
+
+.features li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.featureIcon {
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  color: rgb(var(--ink-rgb) / 0.4);
+}
+
+.featureIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.btnPrimary,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 3.35rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: 999px;
+  font-size: 0.97rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+  color: var(--on-accent);
+  border: 1px solid rgb(var(--accent-rgb) / 0.6);
+  box-shadow: 0 10px 40px -12px var(--accent);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+}
+
+.btnPrimary svg {
+  transition: transform 0.3s ease;
+}
+
+.btnPrimary:hover svg {
+  transform: translateX(3px);
+}
+
+.btnGhost {
+  border: 1px solid rgb(var(--ink-rgb) / 0.15);
+  color: var(--ink);
+  background: transparent;
+}
+
+.btnGhost:hover {
+  border-color: rgb(var(--ink-rgb) / 0.35);
+  background: rgb(var(--ink-rgb) / 0.05);
+}
+
+.trust {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 1.25rem;
+  font-size: 0.8125rem;
+  color: rgb(var(--ink-rgb) / 0.65);
+}
+
+.trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.trustIcon {
+  display: grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  color: #4ade80;
+}
+
+.trustIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Graduates / stack strip */
+.graduates {
+  position: relative;
+  z-index: 4;
+  width: min(100%, 48rem);
+  margin: 2rem auto 0;
+  padding: 1.35rem 1.25rem 1.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgb(var(--ink-rgb) / 0.08);
+  background: rgb(var(--ink-rgb) / 0.03);
+  backdrop-filter: blur(10px);
+}
+
+.gradLabel {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.7);
+  white-space: nowrap;
+}
+
+.gradLine {
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgb(var(--ink-rgb) / 0.4));
+}
+
+.gradLabel .gradLine:last-child {
+  background: linear-gradient(to left, transparent, rgb(var(--ink-rgb) / 0.4));
+}
+
+.gradLogos {
+  list-style: none;
+  margin: 1.15rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+}
+
+.gradLogos li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgb(var(--ink-rgb) / 0.45);
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+
+.gradLogos li:hover {
+  color: rgb(var(--ink-rgb) / 0.9);
+}
+
+.gradIcon {
+  opacity: 0.55;
+  filter: grayscale(0.15);
+  transition: opacity 0.25s ease;
+}
+
+.gradLogos li:hover .gradIcon {
+  opacity: 1;
+}
+
+@media (min-width: 640px) {
+  .scribble {
+    display: block;
+  }
+
+  .handIntro {
+    left: 5%;
+    right: auto;
+    top: 5.5rem;
+  }
+
+  .handSvg {
+    width: 19rem;
+  }
+
+  .handArrow {
+    width: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridPattern {
+    display: block;
+  }
+
+  .hero {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 3rem;
+  }
+
+  .hero {
+    /* Edge fade only — keep face fully opaque */
+    --portrait-mask-x: none;
+    --portrait-mask-y: none;
+  }
+
+  .portraitWrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(46%, 40rem);
+    height: auto;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .portraitSharp {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .portraitWrap::after {
+    width: 12%;
+    background: linear-gradient(
+      to right,
+      var(--bg) 0%,
+      rgb(var(--bg-rgb) / 0.3) 50%,
+      transparent 100%
+    );
+  }
+
+  .portraitImgCover {
+    object-fit: cover;
+    object-position: 48% 14%;
+  }
+
+  .mobileFadeTop,
+  .mobileFadeBottom {
+    display: none;
+  }
+
+  .handIntro {
+    top: 36%;
+    margin-top: 2.75rem;
+    left: calc(100% - min(46%, 40rem) - 0.5rem);
+    right: auto;
+    max-width: 15rem;
+    text-align: left;
+    transform: none;
+    z-index: 5;
+  }
+
+  .handSvg {
+    width: clamp(14rem, 16vw, 16.5rem);
+    transform: rotate(-5deg);
+  }
+
+  .handArrow {
+    width: 3.75rem;
+    margin: 0.4rem auto 0 0.85rem;
+    transform: rotate(-8deg);
+  }
+
+  .pillBadge {
+    display: inline-flex;
+    margin-left: 0.25rem;
+    padding: 0.2rem 0.55rem 0.2rem 0.45rem;
+    font-size: 0.68rem;
+  }
+
+  .shell {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-height: min(100svh, 54rem);
+    margin: 0 auto;
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+  }
+
+  .copy {
+    text-align: left;
+    max-width: min(34rem, 40vw);
+    margin-inline: 0;
+    position: relative;
+    z-index: 6;
+  }
+
+  .proofPill {
+    background: rgb(var(--ink-rgb) / 0.03);
+    backdrop-filter: none;
+  }
+
+  .title {
+    font-size: clamp(2.4rem, 3.6vw, 3.35rem);
+    max-width: none;
+    white-space: normal;
+  }
+
+  .lead {
+    margin-inline: 0;
+  }
+
+  .features,
+  .ctas,
+  .trust {
+    justify-content: flex-start;
+  }
+
+  .graduates {
+    position: relative;
+    margin-top: -2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .portraitWrap {
+    width: min(44%, 42rem);
+  }
+
+  .handIntro {
+    left: calc(100% - min(44%, 42rem) - 0.25rem);
+  }
+
+  .copy {
+    max-width: min(36rem, 42vw);
+  }
+}

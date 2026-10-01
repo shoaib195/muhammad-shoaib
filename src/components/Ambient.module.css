@@ -1,0 +1,29 @@
+.root {
+  --ax: 0;
+  --ay: 0;
+}
+
+.aurora {
+  transform: translate3d(calc(var(--ax) * 20px), calc(var(--ay) * 14px), 0);
+}
+
+.parallaxA {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--ax) * 40px), calc(var(--ay) * 30px), 0);
+  will-change: transform;
+}
+
+.parallaxB {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--ax) * -28px), calc(var(--ay) * 20px), 0);
+  will-change: transform;
+}
+
+.parallaxC {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--ax) * 18px), calc(var(--ay) * -24px), 0);
+  will-change: transform;
+}

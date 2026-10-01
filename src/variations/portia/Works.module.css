@@ -1,0 +1,132 @@
+.works {
+  background: var(--p-white);
+  color: var(--p-ink);
+  padding: clamp(4rem, 9vw, 7.5rem) var(--p-pad);
+}
+
+.inner {
+  width: min(100%, var(--p-max));
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--p-accent);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--p-display);
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.seeAll {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--p-muted-dark);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.2rem;
+  transition: color 0.25s ease;
+}
+
+.seeAll:hover,
+.seeAll:focus-visible {
+  color: var(--p-accent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
+}
+
+.col {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.colRight {
+  margin-top: clamp(2.5rem, 8vw, 6rem);
+}
+
+.card {
+  display: block;
+  color: inherit;
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.1rem;
+  background: var(--p-surface-2);
+  aspect-ratio: 4 / 3;
+}
+
+.mediaTall {
+  aspect-ratio: 3 / 4;
+}
+
+.media img {
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .media img,
+.card:focus-visible .media img {
+  transform: scale(1.08);
+}
+
+.meta {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.category {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--p-muted-dark);
+}
+
+.projectTitle {
+  margin: 0;
+  font-family: var(--p-display);
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+@media (max-width: 800px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .colRight {
+    margin-top: 0;
+  }
+}

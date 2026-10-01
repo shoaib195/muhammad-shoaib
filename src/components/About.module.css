@@ -1,0 +1,128 @@
+.section {
+  overflow: clip;
+}
+
+.inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding-bottom: 5rem;
+}
+
+.heading {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 500;
+}
+
+.role {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lead {
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.body {
+  margin: 0 0 2rem;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  max-width: 38rem;
+}
+
+.facts {
+  display: grid;
+  gap: 1.1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.facts > div {
+  display: grid;
+  grid-template-columns: 6rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.factLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.factValue {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-size: 0.95rem;
+}
+
+a.factValue {
+  border-bottom: 1px solid var(--line-strong);
+  width: fit-content;
+  transition: color 0.3s, border-color 0.3s;
+}
+
+a.factValue:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.marquee {
+  grid-column: 1 / -1;
+  margin-top: clamp(2rem, 6vw, 4rem);
+  border-block: 1px solid var(--line);
+  padding-block: 1.1rem;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  animation: marquee 28s linear infinite;
+  font-size: clamp(1.4rem, 4vw, 2.3rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  color: rgba(255, 255, 255, 0.22);
+  white-space: nowrap;
+}
+
+.marqueeTrack em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: rgba(255, 168, 0, 0.45);
+  font-weight: 400;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeTrack {
+    animation: none;
+  }
+}

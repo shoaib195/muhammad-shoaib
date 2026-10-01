@@ -1,0 +1,141 @@
+.inner {
+  display: grid;
+  gap: 3rem;
+}
+
+.head {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.h2 {
+  font-size: clamp(2.2rem, 4.8vw, 3.4rem);
+}
+
+.lead {
+  max-width: 34rem;
+  font-size: 1.05rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.formCard {
+  padding: 1.5rem;
+}
+
+.aside {
+  display: grid;
+  gap: 1.5rem;
+  align-content: start;
+}
+
+.availability {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid rgb(var(--accent-rgb) / 0.3);
+  background:
+    radial-gradient(80% 80% at 0% 0%, rgb(var(--accent-rgb) / 0.14), transparent 70%),
+    rgb(var(--ink-rgb) / 0.02);
+}
+
+.availability > span {
+  width: fit-content;
+}
+
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tags li {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+  background: rgb(var(--bg-rgb) / 0.5);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.facts {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0 0.25rem;
+}
+
+.facts div {
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--z800);
+}
+
+.facts div:last-child {
+  border-bottom: 0;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--z500);
+}
+
+.facts dd {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.facts a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgb(var(--accent-rgb) / 0.5);
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.facts a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.note {
+  margin: 0;
+  padding: 0 0.25rem;
+  font-size: 1.2rem;
+  color: var(--z500);
+}
+
+@media (min-width: 768px) {
+  .formCard {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .formCard {
+    padding: 2.5rem;
+  }
+
+  .aside {
+    position: sticky;
+    top: 6rem;
+  }
+}

@@ -1,0 +1,26 @@
+.root {
+  --elian-bg: #ffffff;
+  --elian-ink: #0a0a0a;
+  --elian-muted: rgba(10, 10, 10, 0.55);
+  --elian-lime: #c8ff00;
+  --elian-lime-soft: #c3ff4d;
+  --elian-serif: var(--font-elian-serif), "Times New Roman", Georgia, serif;
+  --elian-sans: var(--font-elian-sans), "Segoe UI", sans-serif;
+
+  min-height: 100vh;
+  background: var(--elian-bg);
+  color: var(--elian-ink);
+  font-family: var(--elian-sans);
+  overflow-x: clip;
+}
+
+.root :global(a:focus-visible),
+.root :global(button:focus-visible) {
+  outline: 2px solid var(--elian-ink);
+  outline-offset: 3px;
+}
+
+.root :global(img) {
+  max-width: 100%;
+  display: block;
+}

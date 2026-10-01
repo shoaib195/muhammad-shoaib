@@ -1,0 +1,131 @@
+.inner {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.media {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  max-height: 34rem;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--z800);
+  background: var(--z900);
+  box-shadow: 0 40px 80px -40px rgb(var(--shade-rgb) / 0.8);
+}
+
+.frameBack {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 55% at 50% 38%, rgb(var(--accent-rgb) / 0.32), transparent 72%),
+    radial-gradient(90% 60% at 100% 0%, rgb(var(--accent-rgb) / 0.18), transparent 70%),
+    linear-gradient(180deg, var(--z800) 0%, var(--z900) 60%, var(--bg) 100%);
+}
+
+.frameBack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(var(--ink-rgb) / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(var(--ink-rgb) / 0.05) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+  mask-image: radial-gradient(80% 80% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.img {
+  object-fit: cover;
+  object-position: 50% 42%;
+  filter: saturate(1.02) contrast(1.04) drop-shadow(0 30px 40px rgb(0 0 0 / 0.4));
+}
+
+.frameFade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(var(--bg-rgb) / 0.85), rgb(var(--bg-rgb) / 0.25) 22%, transparent 42%);
+}
+
+.frameBadge {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  background: rgb(var(--bg-rgb) / 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.caption {
+  margin: 0;
+  text-align: center;
+  color: var(--z500);
+  font-size: 1.25rem;
+}
+
+.copy {
+  display: grid;
+  gap: 1.1rem;
+  align-content: center;
+}
+
+.h2 {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+}
+
+.statement {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.facts {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--z800);
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--z500);
+  padding-top: 0.2rem;
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--z300);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 4.5rem;
+    align-items: center;
+  }
+}

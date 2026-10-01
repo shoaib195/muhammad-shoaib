@@ -1,0 +1,361 @@
+.site {
+  color-scheme: dark;
+  --bg: #08090b;
+  --bg-rgb: 8 9 11;
+  --fg: #0a0a0b;
+  --shade: #000;
+  --shade-rgb: 0 0 0;
+  --ink: #fafafa;
+  --ink-rgb: 250 250 250;
+  --ink-soft: rgb(var(--ink-rgb) / 0.72);
+  --muted: rgb(var(--ink-rgb) / 0.48);
+  --line: rgb(var(--ink-rgb) / 0.08);
+  --line-strong: rgb(var(--ink-rgb) / 0.16);
+  --z200: #e4e4e7;
+  --z300: #d4d4d8;
+  --z400: #a1a1aa;
+  --z500: #71717a;
+  --z600: #52525b;
+  --z700: #3f3f46;
+  --z800: #27272a;
+  --z900: #18181b;
+  --z950: #09090b;
+  --z700-rgb: 63 63 70;
+  --z800-rgb: 39 39 42;
+  --z900-rgb: 24 24 27;
+  --z950-rgb: 9 9 11;
+  --accent: #eb3514;
+  --accent-rgb: 235 53 20;
+  --accent-2: #ff7a59;
+  --accent-deep: #b3230a;
+  --accent-soft: rgb(var(--accent-rgb) / 0.14);
+  --glow: rgb(var(--accent-rgb) / 0.22);
+  --glow-cool: rgb(255 122 89 / 0.12);
+  --on-accent: #fff;
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --pad: clamp(1.25rem, 3vw, 2.5rem);
+  --max: 80rem;
+  --nav-h: 4.5rem;
+  --font-sans: var(--font-site-sans), system-ui, sans-serif;
+  --font-mono: var(--font-site-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-site-display), Georgia, serif;
+  --font-hand: var(--font-site-hand), Caveat, cursive;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+.site[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fbfaf9;
+  --bg-rgb: 251 250 249;
+  --fg: #f3f1ee;
+  --shade: #fff;
+  --shade-rgb: 255 255 255;
+  --ink: #101012;
+  --ink-rgb: 16 16 18;
+  --z200: #2a2a2e;
+  --z300: #3f3f46;
+  --z400: #52525b;
+  --z500: #71717a;
+  --z600: #a1a1aa;
+  --z700: #d4d4d8;
+  --z800: #e4e4e7;
+  --z900: #f1f1f2;
+  --z950: #f7f7f7;
+  --z700-rgb: 212 212 216;
+  --z800-rgb: 228 228 231;
+  --z900-rgb: 241 241 242;
+  --z950-rgb: 247 247 247;
+  --accent: #e02f0f;
+  --accent-rgb: 224 47 15;
+  --accent-2: #ff6a45;
+  --accent-deep: #a11f07;
+  --glow: rgb(var(--accent-rgb) / 0.16);
+  --glow-cool: rgb(255 122 89 / 0.1);
+}
+
+.site :global(a:focus-visible),
+.site :global(button:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.ambient {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Shared primitives (mirrors reference) ---------- */
+
+.container {
+  width: min(100%, var(--max));
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.section {
+  position: relative;
+  isolation: isolate;
+  padding: 3.5rem 0;
+}
+
+/* section-to-section transition: hairline + soft glow */
+.section::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-rgb) / 0.35) 35%, rgb(var(--ink-rgb) / 0.18) 50%, rgb(var(--accent-rgb) / 0.35) 65%, transparent);
+  opacity: 0.7;
+}
+
+.section::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  top: -6rem;
+  left: 50%;
+  z-index: -3;
+  width: min(60rem, 90%);
+  height: 12rem;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.12), transparent 100%);
+  filter: blur(40px);
+}
+
+.sectionGlow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 180px, #000 calc(100% - 180px), transparent);
+}
+
+.sectionGlow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(640px 460px at 6% 160px, rgb(var(--accent-rgb) / 0.06), transparent 70%),
+    radial-gradient(520px 380px at 34% 180px, rgb(255 122 89 / 0.035), transparent 70%),
+    radial-gradient(560px 420px at 94% calc(100% - 220px), rgb(var(--accent-rgb) / 0.035), transparent 70%);
+}
+
+.taglineRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tagline {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--z500);
+}
+
+.taglineLine {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, var(--z700), var(--z800), transparent);
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  text-wrap: pretty;
+}
+
+.h2 .dim,
+.h2 .bright {
+  display: block;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.h2 .dim {
+  background-image: linear-gradient(to bottom, var(--z400), var(--z600));
+}
+
+.h2 .bright {
+  background-image: linear-gradient(to bottom, var(--ink), var(--z300));
+}
+
+.textGradient {
+  background-image: linear-gradient(135deg, var(--accent-2) 0%, var(--accent) 50%, var(--accent-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgb(var(--accent-rgb) / 0.25));
+}
+
+.body {
+  margin: 0;
+  color: var(--z400);
+  line-height: 1.7;
+}
+
+.bodyMuted {
+  margin: 0;
+  color: var(--z500);
+  line-height: 1.7;
+}
+
+.underlineHand {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.underlineHand svg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35em;
+  width: 100%;
+  height: 0.5em;
+  color: var(--accent);
+}
+
+.card {
+  border-radius: var(--radius);
+  border: 1px solid var(--z800);
+  background:
+    linear-gradient(135deg, rgb(var(--z800-rgb) / 0.8), rgb(var(--shade-rgb) / 0.6) 50%, rgb(var(--z800-rgb) / 0.2)),
+    rgb(var(--shade-rgb) / 0.6);
+  transition: border-color 0.4s var(--ease), transform 0.4s var(--ease), background 0.35s var(--ease);
+}
+
+.site[data-theme="light"] .card {
+  box-shadow: 0 1px 2px rgb(16 16 18 / 0.04), 0 12px 32px -20px rgb(16 16 18 / 0.18);
+}
+
+.cardHover:hover {
+  border-color: var(--z700);
+  transform: translateY(-0.5rem);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s var(--ease), background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent) 55%, var(--accent-deep));
+  color: var(--on-accent);
+  border: 1px solid rgb(var(--accent-rgb) / 0.6);
+  box-shadow: 0 10px 40px -12px rgb(var(--accent-rgb) / 0.8);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+}
+
+.btnSecondary {
+  background: rgb(var(--ink-rgb) / 0.04);
+  color: var(--ink);
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+}
+
+.btnSecondary:hover {
+  border-color: rgb(var(--ink-rgb) / 0.28);
+  background: rgb(var(--ink-rgb) / 0.08);
+}
+
+/* Professional status badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
+  background: rgb(var(--ink-rgb) / 0.04);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.badgeDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgb(34 197 94 / 0.18);
+}
+
+.badgeAccent .badgeDot {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.18);
+}
+
+.btnSecondary svg {
+  color: var(--z500);
+  transition: color 0.25s;
+}
+
+.btnSecondary:hover svg {
+  color: #fff;
+}
+
+.hand {
+  font-family: var(--font-hand);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding: 5rem 0;
+  }
+}

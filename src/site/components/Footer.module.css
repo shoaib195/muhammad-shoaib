@@ -1,0 +1,236 @@
+.footer {
+  position: relative;
+  z-index: 10;
+  margin-top: auto;
+  padding: 2rem 1rem 1rem;
+  background: var(--fg);
+}
+
+.frame {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: 96%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid var(--z800);
+  background: linear-gradient(to top, var(--shade), transparent);
+  transform: translate(-50%, -50%);
+}
+
+.frameFade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, var(--fg), transparent);
+}
+
+.framePattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(to right, rgb(var(--ink-rgb) / 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--ink-rgb) / 0.12) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.inner {
+  width: min(100%, var(--max));
+  margin-inline: auto;
+}
+
+.top {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 0 1.5rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+
+.logoImg {
+  width: auto;
+  height: 1.75rem;
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.mark {
+  display: none;
+}
+
+.slash {
+  display: none;
+  color: var(--z400);
+}
+
+.email {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2.5rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(135deg, var(--z700), var(--z800), var(--z900));
+  box-shadow: inset 0 1px 0 var(--z700);
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.email svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.right {
+  display: grid;
+  gap: 1rem;
+}
+
+.follow {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  color: var(--z400);
+}
+
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.socialBtn {
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--z800);
+  background: linear-gradient(135deg, rgb(var(--z700-rgb) / 0.8), var(--z800), var(--z900));
+  box-shadow: inset 0 1px 0 var(--z700);
+  color: var(--ink);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.socialBtn:hover {
+  box-shadow: 0 25px 50px -12px rgb(161 161 170 / 0.25);
+  transform: translateY(-2px);
+}
+
+.socialBtn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.bottom {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.5rem 0;
+  border-top: 1px dashed var(--z700);
+}
+
+.copy {
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--ink);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.links a {
+  font-size: 0.875rem;
+  color: var(--z400);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.links a:hover {
+  color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .footer {
+    padding: 2rem 1.5rem 1rem;
+  }
+
+  .top {
+    flex-direction: row;
+    padding: 1.5rem 1rem;
+  }
+
+  .brand {
+    display: flex;
+  }
+
+  .slash {
+    display: block;
+  }
+
+  .email {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--z400);
+  }
+
+  .email:hover {
+    color: var(--ink);
+  }
+
+  .follow {
+    display: none;
+  }
+
+  .socialBtn {
+    padding: 0.75rem;
+  }
+
+  .bottom {
+    flex-direction: row;
+    padding: 1.5rem 1rem;
+  }
+
+  .copy {
+    color: var(--z400);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer {
+    padding-top: 4rem;
+  }
+
+  .top,
+  .bottom {
+    padding-inline: 0;
+  }
+}

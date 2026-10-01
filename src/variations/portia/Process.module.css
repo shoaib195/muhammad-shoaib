@@ -1,0 +1,91 @@
+.process {
+  position: relative;
+  background: var(--p-bg);
+  color: var(--p-white);
+  padding: clamp(4.5rem, 10vw, 8rem) var(--p-pad);
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  inset: auto -10% -20% auto;
+  width: min(50vw, 28rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 90, 60, 0.2), transparent 68%);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  width: min(100%, var(--p-max));
+  margin-inline: auto;
+  z-index: 1;
+}
+
+.heading {
+  margin: 0 0 clamp(2.5rem, 6vw, 4.5rem);
+  font-family: var(--p-display);
+  font-size: clamp(2.8rem, 9vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.35) 45%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.card {
+  position: relative;
+  padding: 1.5rem 0 0;
+  border-top: 1px solid var(--p-line);
+}
+
+.number {
+  display: block;
+  margin-bottom: 1.35rem;
+  font-family: var(--p-display);
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: var(--p-accent);
+}
+
+.title {
+  margin: 0 0 0.85rem;
+  font-family: var(--p-display);
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+
+.body {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--p-muted);
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

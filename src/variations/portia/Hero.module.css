@@ -1,0 +1,154 @@
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--p-nav-h));
+  padding: clamp(2.5rem, 6vw, 5rem) var(--p-pad) clamp(3rem, 7vw, 6rem);
+  overflow: hidden;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+.inner {
+  width: min(100%, var(--p-max));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  min-height: calc(100vh - var(--p-nav-h) - 6rem);
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+}
+
+.role {
+  display: inline-block;
+  margin: 0 0 1.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--p-accent);
+}
+
+.tagline {
+  margin: 0 0 1.5rem;
+  max-width: 18ch;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  color: var(--p-muted);
+  text-transform: uppercase;
+}
+
+.name {
+  margin: 0;
+  font-family: var(--p-display);
+  font-size: clamp(3.6rem, 11vw, 8.75rem);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--p-white);
+}
+
+.name span {
+  display: block;
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: clamp(22rem, 52vw, 34rem);
+}
+
+.glow {
+  position: absolute;
+  width: min(92%, 34rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(232, 90, 60, 0.55) 0%,
+    rgba(232, 90, 60, 0.22) 42%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.orangeRing {
+  position: absolute;
+  width: min(88%, 30rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--p-accent);
+  transform: translate(6%, 4%);
+}
+
+.portraitWrap {
+  position: relative;
+  width: min(78%, 26rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.portrait {
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+.hireBadge {
+  position: absolute;
+  right: 4%;
+  bottom: 12%;
+  z-index: 3;
+  width: clamp(5.5rem, 12vw, 7.25rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--p-accent);
+  color: var(--p-white);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: var(--p-display);
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  box-shadow: 0 18px 40px rgba(232, 90, 60, 0.35);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hireBadge:hover,
+.hireBadge:focus-visible {
+  transform: scale(1.06) rotate(-6deg);
+}
+
+.hireBadge svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 960px) {
+  .inner {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+
+  .name {
+    font-size: clamp(3.2rem, 16vw, 5.5rem);
+  }
+
+  .visual {
+    order: -1;
+    min-height: clamp(20rem, 70vw, 28rem);
+  }
+
+  .tagline {
+    max-width: 28ch;
+  }
+}
