@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { navCta, navLinks, site } from "../data";
-import { useTheme } from "../theme";
+// import { useTheme } from "../theme"; // re-enable with theme toggle
 import { splitHref } from "../scroll";
 import { SmartLink } from "./SmartLink";
 import styles from "./Header.module.css";
@@ -15,7 +15,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [section, setSection] = useState("top");
-  const { theme, toggle } = useTheme();
+  // const { theme, toggle } = useTheme(); // re-enable with theme toggle
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -101,6 +101,7 @@ export function Header() {
         </nav>
 
         <div className={styles.actions}>
+          {/* Theme toggle — hidden for now; uncomment to re-enable
           <button
             type="button"
             className={styles.themeBtn}
@@ -127,6 +128,7 @@ export function Header() {
               </motion.span>
             </span>
           </button>
+          */}
 
           <SmartLink href={navCta.href} className={styles.dashboard}>
             <span className={styles.access}>

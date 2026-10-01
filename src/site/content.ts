@@ -74,7 +74,7 @@ export const process = [
 export const processIncludes = ["Design-to-code handoff", "PR reviews + performance audits", "Weekly demos & clear updates"];
 
 export const about = {
-  heading: "I'm Shoaib.",
+  heading: "I'm Muhammad Shoaib.",
   statement: "I build interfaces, products and systems designed to survive production.",
   paragraphs: [
     "Frontend engineer with 7+ years across CRMs, dashboards, React Native apps, AI-assisted internal tools and CMS storefronts — four teams, thirty-plus shipped products.",
