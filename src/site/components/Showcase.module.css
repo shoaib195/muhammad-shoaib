@@ -89,6 +89,7 @@
   background: transparent;
   color: var(--ink);
   text-align: left;
+  text-decoration: none;
   font: inherit;
   cursor: pointer;
 }

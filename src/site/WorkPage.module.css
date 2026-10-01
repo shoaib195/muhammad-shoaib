@@ -185,6 +185,7 @@
   text-align: left;
   font: inherit;
   color: var(--ink);
+  text-decoration: none;
   cursor: pointer;
   overflow: hidden;
   border-radius: 1.1rem;

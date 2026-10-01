@@ -1,10 +1,9 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
-import { projects, type Project } from "./projects";
-import { ProjectModal } from "./components/ProjectModal";
+import { projects } from "./projects";
 import { SmartLink } from "./components/SmartLink";
 import { Reveal } from "./components/Reveal";
 import styles from "./WorkPage.module.css";
@@ -18,8 +17,6 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export function WorkPage() {
   const reduced = useReducedMotion();
   const [filter, setFilter] = useState<Filter>("All");
-  const [open, setOpen] = useState<Project | null>(null);
-  const close = useCallback(() => setOpen(null), []);
 
   const list = useMemo(
     () => (filter === "All" ? projects : projects.filter((p) => p.platform.includes(filter))),
@@ -56,7 +53,7 @@ export function WorkPage() {
             </h1>
             <p className={`${s.bodyMuted} ${styles.lead}`}>
               CRMs, dashboards, React Native apps, AI-assisted internal tools and storefronts — built for
-              real teams over 7+ years. Open any card for the overview, my role, the stack and the outcome.
+              real teams over 7+ years. Open any card for the title, overview, stack and project link.
             </p>
           </Reveal>
 
@@ -106,7 +103,7 @@ export function WorkPage() {
               </div>
             </LayoutGroup>
             <p className={styles.hint}>
-              <span className={s.hand}>click any card for the full story</span> ↓
+              <span className={s.hand}>open a project for details</span> ↓
             </p>
           </Reveal>
 
@@ -121,7 +118,7 @@ export function WorkPage() {
                   exit={reduced ? undefined : { opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
                   transition={{ duration: 0.55, ease, delay: Math.min(i * 0.05, 0.3) }}
                 >
-                  <button type="button" className={`${s.card} ${styles.card}`} onClick={() => setOpen(p)}>
+                  <SmartLink href={`/work/${p.id}`} className={`${s.card} ${styles.card}`} aria-label={`View project: ${p.name}`}>
                     <span className={styles.media}>
                       <Image
                         src={p.cover}
@@ -161,7 +158,7 @@ export function WorkPage() {
                         <path d="M7 7h10v10M7 17 17 7" />
                       </svg>
                     </span>
-                  </button>
+                  </SmartLink>
                 </motion.li>
               ))}
             </AnimatePresence>
@@ -193,8 +190,6 @@ export function WorkPage() {
           </Reveal>
         </div>
       </section>
-
-      <ProjectModal project={open} onClose={close} />
     </main>
   );
 }

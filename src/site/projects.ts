@@ -19,6 +19,14 @@ export type Project = {
   status?: "Currently building" | "Shipped" | "Ongoing";
 };
 
+export function getProject(id: string): Project | undefined {
+  return projects.find((p) => p.id === id);
+}
+
+export function getProjectIds(): string[] {
+  return projects.map((p) => p.id);
+}
+
 export const projects: Project[] = [
   {
     id: "crm-admin",

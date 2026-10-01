@@ -1,10 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import Image from "next/image";
 import { projects, type Project } from "../projects";
 import { Reveal } from "./Reveal";
-import { ProjectModal } from "./ProjectModal";
 import { SmartLink } from "./SmartLink";
 import styles from "./Showcase.module.css";
 import s from "../Site.module.css";
@@ -12,9 +10,6 @@ import s from "../Site.module.css";
 const featured = projects.slice(0, 6);
 
 export function Showcase() {
-  const [open, setOpen] = useState<Project | null>(null);
-  const close = useCallback(() => setOpen(null), []);
-
   return (
     <section className={`${s.section} ${styles.section}`} id="works">
       <div className={styles.glow} aria-hidden="true" />
@@ -35,7 +30,7 @@ export function Showcase() {
             <p className={styles.lead}>
               From early-stage startups to production systems used by real teams. Six of them, with the
               role I played, the stack and the outcome.{" "}
-              <span className={styles.handNote}>Open a case study for the full story.</span>
+              <span className={styles.handNote}>Open a project for the details.</span>
             </p>
           </div>
         </Reveal>
@@ -44,7 +39,7 @@ export function Showcase() {
           {featured.map((p, i) => (
             <Reveal key={p.id} delay={0.05 * (i % 3)} className={styles.cell}>
               <article className={`${s.card} ${styles.card}`}>
-                <button type="button" className={styles.cardBtn} onClick={() => setOpen(p)} aria-label={`View case study: ${p.name}`}>
+                <SmartLink href={`/work/${p.id}`} className={styles.cardBtn} aria-label={`View project: ${p.name}`}>
                   <span className={styles.media}>
                     <Image
                       src={p.cover}
@@ -91,13 +86,13 @@ export function Showcase() {
                     </span>
 
                     <span className={styles.cta}>
-                      View case study
+                      View project
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
                     </span>
                   </span>
-                </button>
+                </SmartLink>
               </article>
             </Reveal>
           ))}
@@ -113,8 +108,6 @@ export function Showcase() {
           </SmartLink>
         </Reveal>
       </div>
-
-      <ProjectModal project={open} onClose={close} />
     </section>
   );
 }
