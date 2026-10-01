@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Silence Next 16 default-Turbopack warning when a webpack() hook exists
+  turbopack: {},
   images: {
     remotePatterns: [
       {

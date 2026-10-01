@@ -20,7 +20,13 @@ export function SmartLink({ href, onClick, children, ...rest }: Props) {
   const handle = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
-    if (!hash && path !== pathname) return; // plain route change, let Link handle it
+
+    // Cross-route without hash: push imperatively so mobile menu unmount can't cancel navigation
+    if (!hash && path !== pathname) {
+      e.preventDefault();
+      router.push(path);
+      return;
+    }
 
     e.preventDefault();
     if (path === pathname) {

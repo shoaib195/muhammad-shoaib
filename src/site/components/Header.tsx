@@ -53,6 +53,10 @@ export function Header() {
   };
 
   useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
@@ -66,7 +70,7 @@ export function Header() {
 
   return (
     <motion.header
-      className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}
+      className={`${styles.header} ${scrolled ? styles.scrolled : ""} ${open ? styles.menuOpen : ""}`}
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -170,7 +174,13 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 * i }}
                 >
-                  <SmartLink href={l.href} onClick={() => setOpen(false)}>
+                  <SmartLink
+                    href={l.href}
+                    onClick={() => {
+                      // Defer close so /work navigation isn't cancelled by unmount
+                      queueMicrotask(() => setOpen(false));
+                    }}
+                  >
                     {l.label}
                   </SmartLink>
                 </motion.li>
@@ -180,7 +190,11 @@ export function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * navLinks.length }}
               >
-                <SmartLink href={navCta.href} onClick={() => setOpen(false)} className={styles.overlayCta}>
+                <SmartLink
+                  href={navCta.href}
+                  onClick={() => queueMicrotask(() => setOpen(false))}
+                  className={styles.overlayCta}
+                >
                   {navCta.label} →
                 </SmartLink>
               </motion.li>
@@ -189,7 +203,11 @@ export function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 * (navLinks.length + 1) }}
               >
-                <a href={site.resumeUrl} download={site.resumeFileName} onClick={() => setOpen(false)}>
+                <a
+                  href={site.resumeUrl}
+                  download={site.resumeFileName}
+                  onClick={() => queueMicrotask(() => setOpen(false))}
+                >
                   Resume (PDF)
                 </a>
               </motion.li>

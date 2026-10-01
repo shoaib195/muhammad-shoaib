@@ -155,7 +155,7 @@
 }
 
 .handIntro > * {
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .handSvg {
@@ -163,9 +163,9 @@
   width: min(68vw, 17rem);
   height: auto;
   color: var(--ink);
-  pointer-events: auto;
-  user-select: text;
-  -webkit-user-select: text;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
   filter: drop-shadow(0 1px 10px rgb(var(--bg-rgb) / 0.8));
 }
 
