@@ -4,6 +4,9 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { defaultLanding, LANDING_SETTING_KEY } from "@/site/cms/defaults";
 import type { LandingContent } from "@/site/cms/types";
 import { mergeLanding } from "@/site/cms/load-client";
+import { AdminButton } from "./AdminButton";
+import { ImageUpload, MultiImageUpload } from "./ImageUpload";
+import { SkeletonCard } from "./Skeleton";
 import styles from "./admin.module.css";
 
 const sections = [
@@ -126,7 +129,14 @@ export function LandingEditor({ email }: { email: string }) {
   }
 
   if (!loaded) {
-    return <p className={styles.muted}>Loading landing content…</p>;
+    return (
+      <div className={styles.grid}>
+        <SkeletonCard lines={4} />
+        <SkeletonCard lines={4} />
+        <SkeletonCard lines={3} />
+        <SkeletonCard lines={3} />
+      </div>
+    );
   }
 
   return (
@@ -134,19 +144,17 @@ export function LandingEditor({ email }: { email: string }) {
       <div className={styles.panelHead}>
         <p className={styles.muted}>Signed in as {email}. Changes save to Neon and update the homepage.</p>
         <div className={styles.row}>
-          <button
-            type="button"
-            className={styles.btn}
+          <AdminButton
             onClick={() => {
               setLanding(structuredClone(defaultLanding));
               setMsg("Reset to current code defaults (not saved yet).");
             }}
           >
             Reset to defaults
-          </button>
-          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={saving}>
-            {saving ? "Saving…" : "Save landing"}
-          </button>
+          </AdminButton>
+          <AdminButton type="submit" variant="primary" loading={saving}>
+            Save landing
+          </AdminButton>
         </div>
       </div>
 
@@ -254,13 +262,25 @@ export function LandingEditor({ email }: { email: string }) {
 
         {section === "hero" ? (
           <>
+            <ImageUpload
+              label="Hero portrait"
+              value={landing.hero.portraitSrc}
+              folder="landing"
+              onChange={(portraitSrc) => patch("hero", { ...landing.hero, portraitSrc })}
+            />
+            <MultiImageUpload
+              label="Hero avatars"
+              values={landing.hero.avatars}
+              folder="landing"
+              hint="Small avatar stack in the hero proof pill"
+              onChange={(avatars) => patch("hero", { ...landing.hero, avatars })}
+            />
             <div className={styles.fieldGrid}>
               <Field label="Title line 1" value={landing.hero.titleLine1} onChange={(v) => patch("hero", { ...landing.hero, titleLine1: v })} />
               <Field label="Title accent" value={landing.hero.titleAccent} onChange={(v) => patch("hero", { ...landing.hero, titleAccent: v })} />
               <Field label="Proof text" value={landing.hero.proofText} onChange={(v) => patch("hero", { ...landing.hero, proofText: v })} />
               <Field label="Badge" value={landing.hero.badgeText} onChange={(v) => patch("hero", { ...landing.hero, badgeText: v })} />
               <Field label="Rating" value={landing.hero.rating} onChange={(v) => patch("hero", { ...landing.hero, rating: v })} />
-              <Field label="Portrait src" value={landing.hero.portraitSrc} onChange={(v) => patch("hero", { ...landing.hero, portraitSrc: v })} />
             </div>
             <Field label="Lead" value={landing.hero.lead} onChange={(v) => patch("hero", { ...landing.hero, lead: v })} multiline />
             <LinesField label="Handwriting lines" value={landing.hero.handLines} onChange={(v) => patch("hero", { ...landing.hero, handLines: v })} />
@@ -499,11 +519,16 @@ export function LandingEditor({ email }: { email: string }) {
 
         {section === "about" ? (
           <>
+            <ImageUpload
+              label="About image"
+              value={landing.about.imageSrc}
+              folder="landing"
+              onChange={(imageSrc) => patch("about", { ...landing.about, imageSrc })}
+            />
             <div className={styles.fieldGrid}>
               <Field label="Tagline" value={landing.about.tagline} onChange={(v) => patch("about", { ...landing.about, tagline: v })} />
               <Field label="Heading" value={landing.about.heading} onChange={(v) => patch("about", { ...landing.about, heading: v })} />
               <Field label="Badge" value={landing.about.badge} onChange={(v) => patch("about", { ...landing.about, badge: v })} />
-              <Field label="Image" value={landing.about.imageSrc} onChange={(v) => patch("about", { ...landing.about, imageSrc: v })} />
               <Field label="Caption" value={landing.about.caption} onChange={(v) => patch("about", { ...landing.about, caption: v })} />
             </div>
             <Field label="Statement" value={landing.about.statement} multiline onChange={(v) => patch("about", { ...landing.about, statement: v })} />
@@ -534,22 +559,31 @@ export function LandingEditor({ email }: { email: string }) {
         ) : null}
 
         {section === "cta" ? (
-          <div className={styles.fieldGrid}>
-            <Field label="Title line 1" value={landing.cta.titleLine1} onChange={(v) => patch("cta", { ...landing.cta, titleLine1: v })} />
-            <Field label="Title accent" value={landing.cta.titleAccent} onChange={(v) => patch("cta", { ...landing.cta, titleAccent: v })} />
-            <Field label="Lead" value={landing.cta.lead} multiline onChange={(v) => patch("cta", { ...landing.cta, lead: v })} />
-            <Field label="Button label" value={landing.cta.buttonLabel} onChange={(v) => patch("cta", { ...landing.cta, buttonLabel: v })} />
-            <Field label="Button href" value={landing.cta.buttonHref} onChange={(v) => patch("cta", { ...landing.cta, buttonHref: v })} />
-            <Field label="Note" value={landing.cta.note} onChange={(v) => patch("cta", { ...landing.cta, note: v })} />
-            <Field label="Social text" value={landing.cta.socialText} onChange={(v) => patch("cta", { ...landing.cta, socialText: v })} />
-          </div>
+          <>
+            <MultiImageUpload
+              label="CTA avatars"
+              values={landing.cta.avatars}
+              folder="landing"
+              hint="Avatar row on the final CTA block"
+              onChange={(avatars) => patch("cta", { ...landing.cta, avatars })}
+            />
+            <div className={styles.fieldGrid}>
+              <Field label="Title line 1" value={landing.cta.titleLine1} onChange={(v) => patch("cta", { ...landing.cta, titleLine1: v })} />
+              <Field label="Title accent" value={landing.cta.titleAccent} onChange={(v) => patch("cta", { ...landing.cta, titleAccent: v })} />
+              <Field label="Lead" value={landing.cta.lead} multiline onChange={(v) => patch("cta", { ...landing.cta, lead: v })} />
+              <Field label="Button label" value={landing.cta.buttonLabel} onChange={(v) => patch("cta", { ...landing.cta, buttonLabel: v })} />
+              <Field label="Button href" value={landing.cta.buttonHref} onChange={(v) => patch("cta", { ...landing.cta, buttonHref: v })} />
+              <Field label="Note" value={landing.cta.note} onChange={(v) => patch("cta", { ...landing.cta, note: v })} />
+              <Field label="Social text" value={landing.cta.socialText} onChange={(v) => patch("cta", { ...landing.cta, socialText: v })} />
+            </div>
+          </>
         ) : null}
       </div>
 
       <div className={styles.row}>
-        <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={saving}>
-          {saving ? "Saving…" : "Save landing"}
-        </button>
+        <AdminButton type="submit" variant="primary" loading={saving}>
+          Save landing
+        </AdminButton>
       </div>
     </form>
   );

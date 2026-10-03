@@ -1,31 +1,24 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import { getAdminSession } from "@/lib/auth";
 import { AdminShell } from "@/admin/AdminShell";
 import { DashboardAnalytics } from "@/admin/DashboardAnalytics";
-import styles from "@/admin/admin.module.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Admin Dashboard",
+  title: "Analytics — Admin",
   robots: { index: false, follow: false },
 };
 
-export default async function AdminDashboardPage() {
+export default async function AdminAnalyticsPage() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
 
   return (
     <AdminShell
       email={session.email}
-      title="Dashboard"
-      subtitle="Live traffic, pages, countries and inbox pulse"
-      actions={
-        <Link href="/admin/analytics" className={`${styles.btn} ${styles.btnDark}`}>
-          Full analytics
-        </Link>
-      }
+      title="Analytics"
+      subtitle="Country, IPv4, browser, OS/device, and page path. Exclude your own tests in Settings."
     >
       <DashboardAnalytics />
     </AdminShell>

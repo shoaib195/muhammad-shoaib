@@ -24,6 +24,10 @@
 *.pem
 *.local
 
+# admin uploads (keep folder)
+/public/uploads/**
+!/public/uploads/.gitkeep
+
 # debug
 npm-debug.log*
 yarn-debug.log*

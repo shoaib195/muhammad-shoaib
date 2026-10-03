@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isSmtpReady, sendMail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -11,9 +12,7 @@ type Payload = {
   website?: string; // honeypot
 };
 
-const TO = process.env.CONTACT_TO_EMAIL ?? "shoaib.octachat@gmail.com";
-const FROM = process.env.CONTACT_FROM_EMAIL ?? "Portfolio <onboarding@resend.dev>";
-const RESEND_KEY = process.env.RESEND_API_KEY;
+const TO = process.env.CONTACT_TO_EMAIL ?? process.env.SMTP_USER ?? "shoaib.octachat@gmail.com";
 
 const clean = (v: unknown, max = 2000) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
@@ -43,10 +42,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 422 });
   }
 
-  // Persist for admin inbox (ignore DB errors so mail path still works)
+  // Always persist for admin inbox first
+  let messageId: string | null = null;
   try {
     const { prisma } = await import("@/lib/db");
-    await prisma.contactMessage.create({
+    const saved = await prisma.contactMessage.create({
       data: {
         name,
         email,
@@ -55,8 +55,10 @@ export async function POST(req: Request) {
         details,
       },
     });
+    messageId = saved.id;
   } catch (err) {
     console.warn("[contact] could not save message to DB", err);
+    return NextResponse.json({ ok: false, error: "Could not save your message. Please try again." }, { status: 500 });
   }
 
   const subject = `Inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`;
@@ -71,13 +73,15 @@ export async function POST(req: Request) {
     .filter((l) => l !== null)
     .join("\n");
 
-  if (!RESEND_KEY) {
-    // No mail provider configured: tell the client so it can fall back to mailto.
-    console.warn("[contact] RESEND_API_KEY not set. Inquiry:\n" + text);
-    return NextResponse.json(
-      { ok: false, fallback: true, error: "Mail service is not configured yet." },
-      { status: 503 },
-    );
+  if (!isSmtpReady()) {
+    console.warn("[contact] SMTP not configured. Saved to DB:", messageId);
+    return NextResponse.json({
+      ok: true,
+      saved: true,
+      emailed: false,
+      id: messageId,
+      warning: "Saved to admin inbox. SMTP is not configured.",
+    });
   }
 
   const html = `
@@ -89,17 +93,23 @@ export async function POST(req: Request) {
       <p style="white-space:pre-wrap;border-left:3px solid #eb3514;padding-left:12px">${esc(details)}</p>
     </div>`;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${RESEND_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ from: FROM, to: [TO], reply_to: email, subject, text, html }),
+  const sent = await sendMail({
+    to: TO,
+    subject,
+    text,
+    html,
+    replyTo: email,
   });
 
-  if (!res.ok) {
-    const err = await res.text().catch(() => "");
-    console.error("[contact] Resend error", res.status, err);
-    return NextResponse.json({ ok: false, fallback: true, error: "Could not send right now." }, { status: 502 });
+  if (!sent.ok) {
+    return NextResponse.json({
+      ok: true,
+      saved: true,
+      emailed: false,
+      id: messageId,
+      warning: `Saved to admin inbox, but SMTP delivery failed: ${sent.error}`,
+    });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, saved: true, emailed: true, id: messageId });
 }

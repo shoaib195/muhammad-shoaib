@@ -14,6 +14,7 @@ async function requireAdmin() {
 
 const projectSchema = z.object({
   id: z.string().min(1).max(80).regex(/^[a-z0-9-]+$/),
+  previousId: z.string().min(1).max(80).regex(/^[a-z0-9-]+$/).optional(),
   name: z.string().min(1).max(200),
   tagline: z.string().max(300).optional().default(""),
   category: z.string().max(120).optional().default(""),
@@ -21,8 +22,8 @@ const projectSchema = z.object({
   platform: z.string().max(40).optional().default("Web"),
   period: z.string().max(80).optional().default(""),
   company: z.string().max(120).optional().default(""),
-  cover: z.string().max(300).optional().default("/v2/w1.jpg"),
-  images: z.array(z.string()).optional().default([]),
+  cover: z.string().max(500).optional().default("/v2/w1.jpg"),
+  images: z.array(z.string().max(500)).optional().default([]),
   overview: z.string().max(4000).optional().default(""),
   what: z.string().max(4000).optional().default(""),
   role: z.array(z.string()).optional().default([]),
@@ -69,18 +70,49 @@ export async function PUT(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: parsed.error.flatten() }, { status: 422 });
   }
-  const { id, ...rest } = parsed.data;
-  const project = await prisma.project.update({
-    where: { id },
-    data: {
-      ...rest,
-      liveUrl: rest.liveUrl || null,
-      sourceUrl: rest.sourceUrl || null,
-      status: rest.status || null,
-    },
-  });
-  revalidateSite();
-  return NextResponse.json({ ok: true, project });
+  const { id, previousId, ...rest } = parsed.data;
+  const data = {
+    ...rest,
+    liveUrl: rest.liveUrl || null,
+    sourceUrl: rest.sourceUrl || null,
+    status: rest.status || null,
+  };
+
+  const fromId = previousId && previousId !== id ? previousId : id;
+
+  try {
+    if (fromId !== id) {
+      const clash = await prisma.project.findUnique({ where: { id } });
+      if (clash) {
+        return NextResponse.json({ ok: false, error: "Slug already in use" }, { status: 409 });
+      }
+      const project = await prisma.$transaction(async (tx) => {
+        const existing = await tx.project.findUnique({ where: { id: fromId } });
+        if (!existing) throw new Error("NOT_FOUND");
+        await tx.project.delete({ where: { id: fromId } });
+        return tx.project.create({
+          data: {
+            id,
+            ...data,
+          },
+        });
+      });
+      revalidateSite();
+      return NextResponse.json({ ok: true, project });
+    }
+
+    const project = await prisma.project.update({
+      where: { id },
+      data,
+    });
+    revalidateSite();
+    return NextResponse.json({ ok: true, project });
+  } catch (e) {
+    if (e instanceof Error && e.message === "NOT_FOUND") {
+      return NextResponse.json({ ok: false, error: "Project not found" }, { status: 404 });
+    }
+    return NextResponse.json({ ok: false, error: "Update failed" }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: Request) {

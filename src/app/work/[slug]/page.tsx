@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/site/Site";
 import { ProjectDetail } from "@/site/ProjectDetail";
-import { getProjectIds } from "@/site/projects";
-import { getProjectAsync } from "@/site/projects-db";
+import { getProjectAsync, getProjectIdsAsync } from "@/site/projects-db";
 import { siteFontClass } from "@/site/fonts";
 import { loadLanding } from "@/site/cms/load";
 
+export const dynamic = "force-dynamic";
+
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return getProjectIds().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const ids = await getProjectIdsAsync();
+  return ids.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

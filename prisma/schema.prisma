@@ -64,12 +64,48 @@ model SiteSetting {
 }
 
 model ContactMessage {
-  id          String   @id @default(cuid())
+  id          String         @id @default(cuid())
   name        String
   email       String
   company     String?
   projectType String?
   details     String
-  read        Boolean  @default(false)
-  createdAt   DateTime @default(now())
+  read        Boolean        @default(false)
+  repliedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  replies     ContactReply[]
+}
+
+model ContactReply {
+  id        String         @id @default(cuid())
+  messageId String
+  message   ContactMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  body      String
+  sentBy    String?
+  createdAt DateTime       @default(now())
+
+  @@index([messageId])
+}
+
+model PageVisit {
+  id        String   @id @default(cuid())
+  path      String
+  referrer  String   @default("")
+  ip        String   @default("")
+  country   String   @default("")
+  city      String   @default("")
+  region    String   @default("")
+  userAgent String   @default("")
+  browser   String   @default("")
+  os        String   @default("")
+  device    String   @default("desktop")
+  sessionId String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([country])
+  @@index([path])
+  @@index([ip])
+  @@index([browser])
+  @@index([sessionId, createdAt])
 }
