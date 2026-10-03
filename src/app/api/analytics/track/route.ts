@@ -6,8 +6,8 @@ import {
   detectBrowser,
   detectDevice,
   detectOs,
-  lookupGeo,
   normalizeIp,
+  resolveVisitLocation,
   shouldSkipAnalytics,
 } from "@/lib/analytics";
 
@@ -17,6 +17,9 @@ const schema = z.object({
   path: z.string().min(1).max(300),
   referrer: z.string().max(500).optional().default(""),
   sessionId: z.string().max(80).optional().default(""),
+  latitude: z.number().min(-90).max(90).optional().nullable(),
+  longitude: z.number().min(-180).max(180).optional().nullable(),
+  accuracy: z.number().min(0).max(100000).optional().nullable(),
 });
 
 export async function POST(req: Request) {
@@ -44,7 +47,12 @@ export async function POST(req: Request) {
     if (recent) return NextResponse.json({ ok: true, deduped: true });
   }
 
-  const geo = await lookupGeo(ip);
+  const geo = await resolveVisitLocation({
+    ip,
+    latitude: parsed.data.latitude,
+    longitude: parsed.data.longitude,
+  });
+
   const visit = await prisma.pageVisit.create({
     data: {
       path,
@@ -53,6 +61,12 @@ export async function POST(req: Request) {
       country: geo.country,
       city: geo.city,
       region: geo.region,
+      address: geo.address,
+      isp: geo.isp,
+      latitude: geo.latitude,
+      longitude: geo.longitude,
+      accuracy: typeof parsed.data.accuracy === "number" ? parsed.data.accuracy : null,
+      locationSource: geo.locationSource,
       userAgent: ua.slice(0, 400),
       browser: detectBrowser(ua),
       os: detectOs(ua),
@@ -61,5 +75,9 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ ok: true, id: visit.id });
+  return NextResponse.json({
+    ok: true,
+    id: visit.id,
+    locationSource: visit.locationSource,
+  });
 }

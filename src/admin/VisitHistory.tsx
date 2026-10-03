@@ -10,6 +10,13 @@ type Visit = {
   ip: string;
   country: string;
   location?: string;
+  address?: string;
+  isp?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  accuracy?: number | null;
+  locationSource?: string;
+  mapsUrl?: string;
   browser?: string;
   os?: string;
   device: string;
@@ -209,6 +216,11 @@ export function VisitHistory() {
         </p>
       </div>
 
+      <p className={styles.muted} style={{ margin: 0 }}>
+        Auto-detected from visitor IP (ipwho.is) — country, city, region, approximate coordinates, ISP. No browser
+        permission needed. Exact house/street GPS is not available without the visitor manually sharing location.
+      </p>
+
       <div className={styles.toolbar}>
         <div className={styles.toolbarActions}>
           <button
@@ -256,8 +268,9 @@ export function VisitHistory() {
                 <th>When</th>
                 <th>Page path</th>
                 <th>Country</th>
-                <th>Location</th>
+                <th>Address / Location</th>
                 <th>IPv4</th>
+                <th>ISP</th>
                 <th>Browser</th>
                 <th>OS / Device</th>
                 <th>Actions</th>
@@ -280,10 +293,22 @@ export function VisitHistory() {
                     <code className={styles.monoPath}>{r.path}</code>
                   </td>
                   <td>{r.country || "—"}</td>
-                  <td>{r.location || "—"}</td>
+                  <td style={{ maxWidth: "18rem" }}>
+                    <span>{r.address || r.location || "—"}</span>
+                    <span className={styles.muted} style={{ display: "block", fontSize: "0.78rem" }}>
+                      {r.locationSource === "gps" ? "GPS + reverse geocode" : "IP approximate"}
+                      {typeof r.accuracy === "number" ? ` · ±${Math.round(r.accuracy)}m` : ""}
+                    </span>
+                    {r.mapsUrl ? (
+                      <a href={r.mapsUrl} target="_blank" rel="noreferrer" className={styles.textLink}>
+                        Open map
+                      </a>
+                    ) : null}
+                  </td>
                   <td>
                     <code className={styles.monoPath}>{r.ip || "—"}</code>
                   </td>
+                  <td>{r.isp || "—"}</td>
                   <td>{r.browser || "—"}</td>
                   <td>
                     <span>{r.os || "—"}</span>
@@ -305,7 +330,7 @@ export function VisitHistory() {
               ))}
               {!visits.length ? (
                 <tr>
-                  <td colSpan={9} className={styles.muted}>
+                  <td colSpan={10} className={styles.muted}>
                     No visits match these filters.
                   </td>
                 </tr>

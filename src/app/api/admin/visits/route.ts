@@ -61,6 +61,12 @@ export async function GET(req: Request) {
         country: true,
         city: true,
         region: true,
+        address: true,
+        isp: true,
+        latitude: true,
+        longitude: true,
+        accuracy: true,
+        locationSource: true,
         browser: true,
         os: true,
         device: true,
@@ -83,6 +89,12 @@ export async function GET(req: Request) {
 
   const visits = rows.map((r) => {
     const ua = r.userAgent || "";
+    const location = formatLocation({
+      address: r.address,
+      city: r.city,
+      region: r.region,
+      country: r.country,
+    });
     return {
       id: r.id,
       path: r.path,
@@ -90,7 +102,17 @@ export async function GET(req: Request) {
       country: r.country || "Unknown",
       city: r.city || "",
       region: r.region || "",
-      location: formatLocation(r.city, r.region, r.country),
+      address: r.address || "",
+      isp: r.isp || "",
+      latitude: r.latitude,
+      longitude: r.longitude,
+      accuracy: r.accuracy,
+      locationSource: r.locationSource || "ip",
+      location,
+      mapsUrl:
+        typeof r.latitude === "number" && typeof r.longitude === "number"
+          ? `https://www.google.com/maps?q=${r.latitude},${r.longitude}`
+          : "",
       browser: r.browser || detectBrowser(ua),
       os: r.os || detectOs(ua),
       device: r.device || "desktop",

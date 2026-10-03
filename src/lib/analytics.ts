@@ -2,13 +2,23 @@ import { cookies, headers } from "next/headers";
 
 export const SKIP_ANALYTICS_COOKIE = "ms_skip_analytics";
 
+export type GeoResult = {
+  country: string;
+  city: string;
+  region: string;
+  address: string;
+  isp: string;
+  latitude: number | null;
+  longitude: number | null;
+  locationSource: "ip" | "gps" | "local";
+};
+
 export function isPrivateIp(ip: string) {
   if (!ip) return true;
   const n = normalizeIp(ip);
   if (n === "127.0.0.1" || n === "localhost") return true;
   if (n.startsWith("10.") || n.startsWith("192.168.") || n.startsWith("127.")) return true;
   if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(n)) return true;
-  // Unique local / link-local IPv6
   if (n.includes(":") && (n.startsWith("fc") || n.startsWith("fd") || n.startsWith("fe80"))) return true;
   return false;
 }
@@ -20,7 +30,6 @@ export function normalizeIp(raw: string) {
   if (ip === "::1" || ip === "0:0:0:0:0:0:0:1") return "127.0.0.1";
   const mapped = ip.match(/^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/i);
   if (mapped) return mapped[1];
-  // Strip optional port on IPv4
   const withPort = ip.match(/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/);
   if (withPort) return withPort[1];
   return ip;
@@ -86,11 +95,19 @@ export function detectOs(ua: string) {
   return "Unknown";
 }
 
-export function formatLocation(city: string, region: string, country: string) {
-  const parts = [city, region].filter((p) => p && p !== "Development" && p !== country);
+export function formatLocation(opts: {
+  address?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+}) {
+  if (opts.address?.trim()) return opts.address.trim();
+  const parts = [opts.city, opts.region].filter(
+    (p) => p && p !== "Development" && p !== opts.country,
+  );
   if (parts.length) return parts.join(", ");
-  if (country === "Local") return "Local development";
-  return country || "—";
+  if (opts.country === "Local") return "Local development";
+  return opts.country || "—";
 }
 
 export async function getExcludeIps(): Promise<string[]> {
@@ -110,11 +127,6 @@ export async function getExcludeIps(): Promise<string[]> {
   }
 }
 
-/**
- * Skip only admin/api, opt-out cookie, or explicitly excluded IPs.
- * Localhost IS tracked (as Local) so the dashboard can show real DB rows while developing.
- * Use Settings → exclude browser / IP to keep your own tests out of production stats.
- */
 export async function shouldSkipAnalytics(opts: {
   path: string;
   ip: string;
@@ -128,32 +140,196 @@ export async function shouldSkipAnalytics(opts: {
   return false;
 }
 
-export async function lookupGeo(ip: string): Promise<{ country: string; city: string; region: string }> {
-  const n = normalizeIp(ip);
-  if (!n || isPrivateIp(n)) {
-    return { country: "Local", city: "", region: "" };
-  }
+/** Free reverse-geocode via OpenStreetMap Nominatim (street / area when available). */
+export async function reverseGeocode(lat: number, lon: number): Promise<string> {
   try {
-    const res = await fetch(
-      `http://ip-api.com/json/${encodeURIComponent(n)}?fields=status,country,city,regionName`,
-      { cache: "no-store" },
-    );
-    if (!res.ok) return { country: "Unknown", city: "", region: "" };
+    const url = new URL("https://nominatim.openstreetmap.org/reverse");
+    url.searchParams.set("lat", String(lat));
+    url.searchParams.set("lon", String(lon));
+    url.searchParams.set("format", "jsonv2");
+    url.searchParams.set("addressdetails", "1");
+    url.searchParams.set("zoom", "18");
+
+    const res = await fetch(url.toString(), {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "MuhammadShoaibPortfolio/1.0 (admin analytics)",
+      },
+    });
+    if (!res.ok) return "";
     const data = (await res.json()) as {
-      status?: string;
-      country?: string;
-      city?: string;
-      regionName?: string;
+      display_name?: string;
+      address?: Record<string, string>;
     };
-    if (data.status !== "success") return { country: "Unknown", city: "", region: "" };
+    const a = data.address || {};
+    const street = [a.house_number, a.road || a.pedestrian || a.footway].filter(Boolean).join(" ").trim();
+    const area = a.neighbourhood || a.suburb || a.quarter || a.residential || a.city_district;
+    const city = a.city || a.town || a.village || a.municipality;
+    const bits = [street, area, city, a.state || a.region, a.country].filter(Boolean);
+    if (bits.length >= 2) return bits.join(", ").slice(0, 280);
+    return (data.display_name || "").slice(0, 280);
+  } catch {
+    return "";
+  }
+}
+
+export type ReverseGeoDetails = {
+  address: string;
+  city: string;
+  region: string;
+  country: string;
+};
+
+export async function reverseGeocodeDetails(lat: number, lon: number): Promise<ReverseGeoDetails> {
+  try {
+    const url = new URL("https://nominatim.openstreetmap.org/reverse");
+    url.searchParams.set("lat", String(lat));
+    url.searchParams.set("lon", String(lon));
+    url.searchParams.set("format", "jsonv2");
+    url.searchParams.set("addressdetails", "1");
+    url.searchParams.set("zoom", "18");
+
+    const res = await fetch(url.toString(), {
+      cache: "no-store",
+      headers: {
+        Accept: "application/json",
+        "User-Agent": "MuhammadShoaibPortfolio/1.0 (admin analytics)",
+      },
+    });
+    if (!res.ok) return { address: "", city: "", region: "", country: "" };
+    const data = (await res.json()) as {
+      display_name?: string;
+      address?: Record<string, string>;
+    };
+    const a = data.address || {};
+    const street = [a.house_number, a.road || a.pedestrian || a.footway].filter(Boolean).join(" ").trim();
+    const area = a.neighbourhood || a.suburb || a.quarter || a.residential || a.city_district;
+    const city = a.city || a.town || a.village || a.municipality || "";
+    const region = a.state || a.region || "";
+    const country = a.country || "";
+    const bits = [street, area, city, region, country].filter(Boolean);
     return {
-      country: data.country || "Unknown",
-      city: data.city || "",
-      region: data.regionName || "",
+      address: (bits.length >= 2 ? bits.join(", ") : data.display_name || "").slice(0, 280),
+      city,
+      region,
+      country,
     };
   } catch {
-    return { country: "Unknown", city: "", region: "" };
+    return { address: "", city: "", region: "", country: "" };
   }
+}
+
+/** Free IP geo via ipwho.is (no API key) — city-level, not street. */
+export async function lookupGeo(ip: string): Promise<GeoResult> {
+  const n = normalizeIp(ip);
+  if (!n || isPrivateIp(n)) {
+    return {
+      country: "Local",
+      city: "",
+      region: "",
+      address: "Local development",
+      isp: "",
+      latitude: null,
+      longitude: null,
+      locationSource: "local",
+    };
+  }
+  try {
+    const res = await fetch(`https://ipwho.is/${encodeURIComponent(n)}`, { cache: "no-store" });
+    if (!res.ok) {
+      return {
+        country: "Unknown",
+        city: "",
+        region: "",
+        address: "",
+        isp: "",
+        latitude: null,
+        longitude: null,
+        locationSource: "ip",
+      };
+    }
+    const data = (await res.json()) as {
+      success?: boolean;
+      country?: string;
+      city?: string;
+      region?: string;
+      latitude?: number;
+      longitude?: number;
+      connection?: { isp?: string };
+      flag?: { emoji?: string };
+    };
+    if (data.success === false) {
+      return {
+        country: "Unknown",
+        city: "",
+        region: "",
+        address: "",
+        isp: "",
+        latitude: null,
+        longitude: null,
+        locationSource: "ip",
+      };
+    }
+    const city = data.city || "";
+    const region = data.region || "";
+    const country = data.country || "Unknown";
+    return {
+      country,
+      city,
+      region,
+      address: formatLocation({ city, region, country }),
+      isp: data.connection?.isp || "",
+      latitude: typeof data.latitude === "number" ? data.latitude : null,
+      longitude: typeof data.longitude === "number" ? data.longitude : null,
+      locationSource: "ip",
+    };
+  } catch {
+    return {
+      country: "Unknown",
+      city: "",
+      region: "",
+      address: "",
+      isp: "",
+      latitude: null,
+      longitude: null,
+      locationSource: "ip",
+    };
+  }
+}
+
+export async function resolveVisitLocation(opts: {
+  ip: string;
+  latitude?: number | null;
+  longitude?: number | null;
+}): Promise<GeoResult & { accuracy: number | null }> {
+  const ipGeo = await lookupGeo(opts.ip);
+  const lat = opts.latitude;
+  const lon = opts.longitude;
+
+  if (
+    typeof lat === "number" &&
+    typeof lon === "number" &&
+    Number.isFinite(lat) &&
+    Number.isFinite(lon) &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lon) <= 180
+  ) {
+    const details = await reverseGeocodeDetails(lat, lon);
+    return {
+      country: details.country || ipGeo.country,
+      city: details.city || ipGeo.city,
+      region: details.region || ipGeo.region,
+      address: details.address || ipGeo.address,
+      isp: ipGeo.isp,
+      latitude: lat,
+      longitude: lon,
+      locationSource: "gps",
+      accuracy: null,
+    };
+  }
+
+  return { ...ipGeo, accuracy: null };
 }
 
 export async function analyticsContextFromRequest(req: Request) {

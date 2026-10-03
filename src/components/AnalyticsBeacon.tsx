@@ -18,12 +18,15 @@ function getSessionId() {
   }
 }
 
-/** Lightweight public-site tracker. Skips admin routes client-side too. */
+/**
+ * Silent visitor tracking — no browser GPS permission prompt.
+ * Location comes from server-side IP lookup (ipwho.is): country / city / region / approx coords / ISP.
+ * Exact GPS / house address is impossible without the visitor explicitly allowing geolocation.
+ */
 export function AnalyticsBeacon() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Never track admin (or API) routes — keeps dashboard testing out of analytics too
     if (!pathname || pathname.startsWith("/admin") || pathname.startsWith("/api")) return;
 
     const hash = typeof window !== "undefined" ? window.location.hash.slice(0, 80) : "";
@@ -42,7 +45,6 @@ export function AnalyticsBeacon() {
       }).catch(() => {});
     };
 
-    // Avoid competing with LCP
     if ("requestIdleCallback" in window) {
       (window as Window & { requestIdleCallback: (cb: () => void) => number }).requestIdleCallback(run);
     } else {

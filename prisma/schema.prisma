@@ -88,19 +88,25 @@ model ContactReply {
 }
 
 model PageVisit {
-  id        String   @id @default(cuid())
-  path      String
-  referrer  String   @default("")
-  ip        String   @default("")
-  country   String   @default("")
-  city      String   @default("")
-  region    String   @default("")
-  userAgent String   @default("")
-  browser   String   @default("")
-  os        String   @default("")
-  device    String   @default("desktop")
-  sessionId String   @default("")
-  createdAt DateTime @default(now())
+  id             String   @id @default(cuid())
+  path           String
+  referrer       String   @default("")
+  ip             String   @default("")
+  country        String   @default("")
+  city           String   @default("")
+  region         String   @default("")
+  address        String   @default("")
+  isp            String   @default("")
+  latitude       Float?
+  longitude      Float?
+  accuracy       Float?
+  locationSource String   @default("ip") // ip | gps
+  userAgent      String   @default("")
+  browser        String   @default("")
+  os             String   @default("")
+  device         String   @default("desktop")
+  sessionId      String   @default("")
+  createdAt      DateTime @default(now())
 
   @@index([createdAt])
   @@index([country])
