@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/site/Site";
 import { ProjectDetail } from "@/site/ProjectDetail";
-import { getProject, getProjectIds } from "@/site/projects";
+import { getProjectIds } from "@/site/projects";
+import { getProjectAsync } from "@/site/projects-db";
 import { siteFontClass } from "@/site/fonts";
+import { loadLanding } from "@/site/cms/load";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -13,7 +15,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProjectAsync(slug);
   if (!project) return { title: "Project — Muhammad Shoaib" };
 
   return {
@@ -28,12 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const [project, landing] = await Promise.all([getProjectAsync(slug), loadLanding()]);
   if (!project) notFound();
 
   return (
     <div className={siteFontClass}>
-      <SiteShell>
+      <SiteShell landing={landing} projects={[]} experiences={[]}>
         <ProjectDetail project={project} />
       </SiteShell>
     </div>

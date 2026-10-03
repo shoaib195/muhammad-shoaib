@@ -1,14 +1,16 @@
 "use client";
 
-import { contactAside } from "../content";
-import { site, socials } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import { ContactForm } from "./ContactForm";
 import styles from "./Contact.module.css";
 import s from "../Site.module.css";
 
 export function Contact() {
+  const landing = useLanding();
+  const { contact, site, socials } = landing;
   const linkedin = socials.find((x) => x.label === "LinkedIn")?.href ?? "#";
+  const aside = contact.aside;
 
   return (
     <section className={s.section} id="contact">
@@ -16,18 +18,16 @@ export function Contact() {
       <div className={`${s.container} ${styles.inner}`}>
         <Reveal className={styles.head}>
           <div className={s.taglineRow}>
-            <p className={s.tagline}>08 / Contact</p>
+            <p className={s.tagline}>{contact.tagline}</p>
             <span className={s.taglineLine} aria-hidden="true" />
           </div>
           <h2 className={`${s.h2} ${styles.h2}`}>
-            <span className={s.dim}>Have a product</span>
+            <span className={s.dim}>{contact.dim}</span>
             <span className={s.bright}>
-              worth <span className={s.textGradient}>building?</span>
+              {contact.bright} <span className={s.textGradient}>{contact.brightAccent}</span>
             </span>
           </h2>
-          <p className={`${s.bodyMuted} ${styles.lead}`}>
-            Let&apos;s talk about what you&apos;re building, what isn&apos;t working, and where I can help.
-          </p>
+          <p className={`${s.bodyMuted} ${styles.lead}`}>{contact.lead}</p>
         </Reveal>
 
         <div className={styles.grid}>
@@ -39,10 +39,10 @@ export function Contact() {
             <div className={styles.availability}>
               <span className={`${s.badge} ${s.badgeAccent}`}>
                 <span className={s.badgeDot} />
-                {contactAside.heading}
+                {aside.heading}
               </span>
               <ul className={styles.tags}>
-                {contactAside.items.map((x) => (
+                {aside.items.map((x) => (
                   <li key={x}>{x}</li>
                 ))}
               </ul>
@@ -51,11 +51,11 @@ export function Contact() {
             <dl className={styles.facts}>
               <div>
                 <dt>Location</dt>
-                <dd>{contactAside.location}</dd>
+                <dd>{aside.location}</dd>
               </div>
               <div>
                 <dt>Response</dt>
-                <dd>{contactAside.reply}</dd>
+                <dd>{aside.reply}</dd>
               </div>
               <div>
                 <dt>Email</dt>

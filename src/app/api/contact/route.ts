@@ -43,6 +43,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Please enter a valid email address." }, { status: 422 });
   }
 
+  // Persist for admin inbox (ignore DB errors so mail path still works)
+  try {
+    const { prisma } = await import("@/lib/db");
+    await prisma.contactMessage.create({
+      data: {
+        name,
+        email,
+        company: company || null,
+        projectType: projectType || null,
+        details,
+      },
+    });
+  } catch (err) {
+    console.warn("[contact] could not save message to DB", err);
+  }
+
   const subject = `Inquiry from ${name}${projectType ? ` — ${projectType}` : ""}`;
   const text = [
     `Name: ${name}`,

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
-import { projects } from "./projects";
+import { useCmsProjects } from "./cms/CmsProvider";
 import { SmartLink } from "./components/SmartLink";
 import { Reveal } from "./components/Reveal";
 import styles from "./WorkPage.module.css";
@@ -15,12 +15,13 @@ const filters: Filter[] = ["All", "Web", "Mobile"];
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export function WorkPage() {
+  const projects = useCmsProjects();
   const reduced = useReducedMotion();
   const [filter, setFilter] = useState<Filter>("All");
 
   const list = useMemo(
     () => (filter === "All" ? projects : projects.filter((p) => p.platform.includes(filter))),
-    [filter],
+    [filter, projects],
   );
 
   const counts = useMemo(
@@ -29,7 +30,7 @@ export function WorkPage() {
       Web: projects.filter((p) => p.platform.includes("Web")).length,
       Mobile: projects.filter((p) => p.platform.includes("Mobile")).length,
     }),
-    [],
+    [projects],
   );
 
   return (

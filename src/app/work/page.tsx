@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { SiteShell } from "@/site/Site";
 import { WorkPage } from "@/site/WorkPage";
 import { siteFontClass } from "@/site/fonts";
+import { loadLanding } from "@/site/cms/load";
+import { getProjectsAsync } from "@/site/projects-db";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Work — Muhammad Shoaib",
@@ -13,10 +17,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Work() {
+export default async function Work() {
+  const [landing, projects] = await Promise.all([loadLanding(), getProjectsAsync()]);
+
   return (
     <div className={siteFontClass}>
-      <SiteShell>
+      <SiteShell landing={landing} projects={projects} experiences={[]}>
         <WorkPage />
       </SiteShell>
     </div>

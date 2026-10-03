@@ -2,21 +2,14 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import { ArcText } from "./ArcText";
 import styles from "./Gap.module.css";
 import s from "../Site.module.css";
 
-const items = [
-  { label: "Architecture", stack: "React · Next.js · component systems" },
-  { label: "Product thinking", stack: "users · constraints · trade-offs" },
-  { label: "Performance", stack: "Core Web Vitals · bundles · caching" },
-  { label: "Accessibility", stack: "WCAG · semantics · keyboard" },
-  { label: "Testing", stack: "Unit · integration · E2E" },
-  { label: "Delivery", stack: "CI/CD · reviews · observability" },
-];
-
 export function Gap() {
+  const { gap } = useLanding();
   const reduced = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 90%", "end 55%"] });
@@ -29,27 +22,24 @@ export function Gap() {
       <div className={`${s.container} ${styles.inner}`} ref={ref}>
         <Reveal className={styles.head}>
           <div className={s.taglineRow}>
-            <p className={s.tagline}>01 / The Engineering Gap</p>
+            <p className={s.tagline}>{gap.tagline}</p>
             <span className={s.taglineLine} aria-hidden="true" />
           </div>
           <h2 className={s.h2}>
-            <span className={s.dim}>Code is cheap.</span>
+            <span className={s.dim}>{gap.dim}</span>
             <span className={s.bright}>
-              Judgment is <span className={s.textGradient}>valuable.</span>
+              {gap.bright} <span className={s.textGradient}>{gap.brightAccent}</span>
             </span>
           </h2>
         </Reveal>
 
         <div className={styles.grid}>
           <Reveal className={styles.copy} delay={0.05}>
-            <p className={s.body}>
-              Deciding what to build, whether it&apos;s correct, and how it fits the product is the
-              skill that matters now.
-            </p>
+            <p className={s.body}>{gap.body}</p>
             <p className={s.bodyMuted}>
-              AI changed the job, not the craft. When AI writes the code,{" "}
+              {gap.bodyMutedBefore}{" "}
               <span className={s.underlineHand}>
-                my job is to verify it
+                {gap.bodyMutedUnderline}
                 <svg viewBox="0 0 200 12" fill="none" preserveAspectRatio="none" aria-hidden="true">
                   <motion.path
                     d="M2 8 C 40 2, 90 12, 130 6 S 180 2, 198 7"
@@ -60,12 +50,12 @@ export function Gap() {
                   />
                 </svg>
               </span>
-              , test it, and make sure it holds up in production.
+              {gap.bodyMutedAfter}
             </p>
             <div className={styles.hand}>
               <ArcText
                 className={styles.handSvg}
-                lines={["this is what I bring", "to every build"]}
+                lines={gap.handLines}
                 width={300}
                 lineHeight={40}
                 fontSize={36}
@@ -99,7 +89,7 @@ export function Gap() {
 
           <Reveal delay={0.1}>
             <ul className={styles.list}>
-              {items.map((it, i) => (
+              {gap.items.map((it, i) => (
                 <li key={it.label} className={styles.item}>
                   <span className={styles.num}>0{i + 1}</span>
                   <span className={styles.label}>{it.label}.</span>

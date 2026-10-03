@@ -1,36 +1,45 @@
 "use client";
 
 import Image from "next/image";
-import { projects, type Project } from "../projects";
+import { useCmsProjects, useLanding } from "../cms/CmsProvider";
+import type { Project } from "../projects";
 import { Reveal } from "./Reveal";
 import { SmartLink } from "./SmartLink";
 import styles from "./Showcase.module.css";
 import s from "../Site.module.css";
 
-const featured = projects.slice(0, 6);
-
 export function Showcase() {
+  const { showcase } = useLanding();
+  const featured = useCmsProjects().slice(0, 6);
+
+  // titleAfter is like "products shipped." — keep hand style on the last word
+  const afterParts = showcase.titleAfter.trim().replace(/\.$/, "").split(/\s+/);
+  const afterLast = afterParts.pop() ?? "";
+  const afterRest = afterParts.join(" ");
+
   return (
     <section className={`${s.section} ${styles.section}`} id="works">
       <div className={styles.glow} aria-hidden="true" />
       <div className={`${s.container} ${styles.inner}`}>
         <Reveal className={styles.head}>
           <div className={s.taglineRow}>
-            <p className={s.tagline}>04 / Selected work</p>
+            <p className={s.tagline}>{showcase.tagline}</p>
             <span className={s.taglineLine} aria-hidden="true" />
             <span className={`${s.badge} ${s.badgeAccent}`}>
               <span className={s.badgeDot} />
-              Available for new projects
+              {showcase.badge}
             </span>
           </div>
           <div className={styles.headRow}>
             <h2 className={styles.h2}>
-              <span className={s.textGradient}>30+</span> products <span className={styles.handTitle}>shipped.</span>
+              {showcase.titleBefore}
+              <span className={s.textGradient}>{showcase.titleAccent}</span>
+              {afterRest ? ` ${afterRest} ` : " "}
+              <span className={styles.handTitle}>{afterLast}.</span>
             </h2>
             <p className={styles.lead}>
-              From early-stage startups to production systems used by real teams. Six of them, with the
-              role I played, the stack and the outcome.{" "}
-              <span className={styles.handNote}>Open a project for the details.</span>
+              {showcase.lead}{" "}
+              <span className={styles.handNote}>{showcase.leadNote}</span>
             </p>
           </div>
         </Reveal>

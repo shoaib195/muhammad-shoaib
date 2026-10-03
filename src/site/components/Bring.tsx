@@ -1,6 +1,6 @@
 "use client";
 
-import { bring } from "../content";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import styles from "./Bring.module.css";
 import s from "../Site.module.css";
@@ -28,28 +28,28 @@ const icons = [
 ];
 
 export function Bring() {
+  const { bring } = useLanding();
+
   return (
     <section className={s.section} id="bring">
       <div className={s.sectionGlow} aria-hidden="true" />
       <div className={`${s.container} ${styles.inner}`}>
         <Reveal className={styles.head}>
           <div className={s.taglineRow}>
-            <p className={s.tagline}>02 / What I bring</p>
+            <p className={s.tagline}>{bring.tagline}</p>
             <span className={s.taglineLine} aria-hidden="true" />
           </div>
           <h2 className={s.h2}>
-            <span className={s.dim}>What I bring</span>
+            <span className={s.dim}>{bring.dim}</span>
             <span className={s.bright}>
-              to every <span className={s.textGradient}>build.</span>
+              {bring.bright} <span className={s.textGradient}>{bring.brightAccent}</span>
             </span>
           </h2>
-          <p className={`${s.bodyMuted} ${styles.lead}`}>
-            Four things every team gets, regardless of stack or project size.
-          </p>
+          <p className={`${s.bodyMuted} ${styles.lead}`}>{bring.lead}</p>
         </Reveal>
 
         <div className={styles.grid}>
-          {bring.map((b, i) => (
+          {bring.items.map((b, i) => (
             <Reveal key={b.title} delay={0.06 * i} className={`${s.card} ${s.cardHover} ${styles.card}`}>
               <span className={styles.idx}>0{i + 1}</span>
               <span className={styles.icon}>{icons[i]}</span>

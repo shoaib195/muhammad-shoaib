@@ -2,12 +2,13 @@
 
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
-import { breakSequence } from "../content";
 import styles from "./Stakes.module.css";
 import s from "../Site.module.css";
 
 export function Stakes() {
+  const { stakes } = useLanding();
   const reduced = useReducedMotion();
   const listRef = useRef<HTMLOListElement>(null);
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 80%", "end 70%"] });
@@ -18,24 +19,21 @@ export function Stakes() {
       <div className={s.sectionGlow} aria-hidden="true" />
       <div className={`${s.container} ${styles.inner}`}>
         <div className={s.taglineRow}>
-          <p className={s.tagline}>03 / What&apos;s at stake</p>
+          <p className={s.tagline}>{stakes.tagline}</p>
           <span className={s.taglineLine} aria-hidden="true" />
         </div>
 
         <div className={styles.grid}>
           <Reveal className={styles.sticky}>
             <h2 className={`${s.h2} ${styles.h2}`}>
-              <span className={s.dim}>Every interface breaks.</span>
+              <span className={s.dim}>{stakes.dim}</span>
               <span className={s.bright}>
-                Someone has to <span className={s.textGradient}>know why.</span>
+                {stakes.bright} <span className={s.textGradient}>{stakes.brightAccent}</span>
               </span>
             </h2>
-            <p className={`${s.bodyMuted} ${styles.lead}`}>
-              I don&apos;t just build interfaces that look good in a screenshot. I build interfaces that
-              survive real users, real devices and real production environments.
-            </p>
+            <p className={`${s.bodyMuted} ${styles.lead}`}>{stakes.lead}</p>
             <ol className={styles.sequence} aria-label="What gets checked before shipping">
-              {breakSequence.map((step, i) => (
+              {stakes.sequence.map((step, i) => (
                 <motion.li
                   key={step}
                   initial={reduced ? false : { opacity: 0, x: -10 }}
@@ -48,10 +46,7 @@ export function Stakes() {
                 </motion.li>
               ))}
             </ol>
-            <p className={`${s.bodyMuted} ${styles.leadSmall}`}>
-              AI gives you a probable fix, not one proven for your users. Knowing the difference is
-              engineering.
-            </p>
+            <p className={`${s.bodyMuted} ${styles.leadSmall}`}>{stakes.leadSmall}</p>
           </Reveal>
 
           <Reveal delay={0.05}>
@@ -182,9 +177,10 @@ export function Stakes() {
             </ol>
 
             <p className={styles.closing}>
-              <span className={s.dim}>AI gives you a possible fix.</span>
+              <span className={s.dim}>{stakes.closingDim}</span>
               <span className={s.bright}>
-                Knowing if it&apos;s <em>the</em> fix is <span className={s.textGradient}>engineering.</span>
+                {stakes.closingBrightBefore}{" "}
+                <span className={s.textGradient}>{stakes.closingBrightAccent}</span>
               </span>
             </p>
           </Reveal>

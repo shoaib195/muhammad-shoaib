@@ -1,30 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { site } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import styles from "./CTA.module.css";
 import s from "../Site.module.css";
 
-const avatars = ["/v2/avatars/a1.jpg", "/v2/avatars/a2.jpg", "/v2/avatars/a3.jpg", "/v2/avatars/a4.jpg"];
-
 export function CTA() {
+  const landing = useLanding();
+  const { cta, site } = landing;
+
   return (
     <section className={styles.section} id="hire">
       <div className={styles.glow} aria-hidden="true" />
       <Reveal className={styles.inner}>
         <h2 className={styles.h2}>
-          Stop shipping templates.
+          {cta.titleLine1}
           <br />
-          <span className={s.textGradient}>Start engineering products.</span>
+          <span className={s.textGradient}>{cta.titleAccent}</span>
         </h2>
-        <p className={styles.lead}>
-          One engineer covers the whole frontend: React, Next.js, React Native and whatever comes
-          next. Ship at your pace, with someone who owns the result alongside you.
-        </p>
+        <p className={styles.lead}>{cta.lead}</p>
         <div className={styles.ctaWrap}>
-          <a href="#contact" className={styles.btn}>
-            Let&apos;s work together
+          <a href={cta.buttonHref} className={styles.btn}>
+            {cta.buttonLabel}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
@@ -37,7 +35,7 @@ export function CTA() {
             <path d="m9 12 2 2 4-4" />
           </svg>
           <span>
-            Reply within 24 hours. Prefer a file?{" "}
+            {cta.note}{" "}
             <a href={site.resumeUrl} download={site.resumeFileName} className={styles.noteLink}>
               Download the resume
             </a>
@@ -45,11 +43,11 @@ export function CTA() {
         </p>
         <div className={styles.social}>
           <span className={styles.avatars} aria-hidden="true">
-            {avatars.map((a) => (
+            {cta.avatars.map((a) => (
               <Image key={a} src={a} alt="" width={48} height={48} className={styles.avatar} />
             ))}
           </span>
-          <span className={styles.socialText}>7+ years · 4 teams · 30+ products shipped</span>
+          <span className={styles.socialText}>{cta.socialText}</span>
         </div>
       </Reveal>
     </section>

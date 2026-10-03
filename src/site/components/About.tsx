@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { about } from "../content";
-import { site, socials } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import styles from "./About.module.css";
 import s from "../Site.module.css";
 
 export function About() {
+  const landing = useLanding();
+  const { about, site, socials } = landing;
   const linkedin = socials.find((x) => x.label === "LinkedIn")?.href ?? "#";
 
   return (
@@ -18,7 +19,7 @@ export function About() {
           <div className={styles.frame}>
             <span className={styles.frameBack} aria-hidden="true" />
             <Image
-              src="/v2/about-bust.png"
+              src={about.imageSrc}
               alt={`${site.name}, frontend engineer`}
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
@@ -27,17 +28,17 @@ export function About() {
             <span className={styles.frameFade} aria-hidden="true" />
             <span className={`${s.badge} ${styles.frameBadge}`}>
               <span className={s.badgeDot} />
-              Open to new opportunities
+              {about.badge}
             </span>
           </div>
           <p className={styles.caption}>
-            <span className={s.hand}>based in Karachi, shipping worldwide</span>
+            <span className={s.hand}>{about.caption}</span>
           </p>
         </Reveal>
 
         <Reveal delay={0.08} className={styles.copy}>
           <div className={s.taglineRow}>
-            <p className={s.tagline}>07 / About</p>
+            <p className={s.tagline}>{about.tagline}</p>
             <span className={s.taglineLine} aria-hidden="true" />
           </div>
           <h2 className={`${s.h2} ${styles.h2}`}>

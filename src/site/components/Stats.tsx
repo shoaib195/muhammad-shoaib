@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { stackGroups, stats } from "../content";
+import { useLanding } from "../cms/CmsProvider";
 import { Reveal } from "./Reveal";
 import styles from "./Stats.module.css";
 import s from "../Site.module.css";
 
 export function Stats() {
+  const landing = useLanding();
+  const { stats, stackGroups } = landing;
   const reduced = useReducedMotion();
 
   return (

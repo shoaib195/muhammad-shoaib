@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { navCta, navLinks, site } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 // import { useTheme } from "../theme"; // re-enable with theme toggle
 import { splitHref } from "../scroll";
 import { SmartLink } from "./SmartLink";
 import styles from "./Header.module.css";
 
 export function Header() {
+  const landing = useLanding();
+  const { site } = landing;
+  const navLinks = landing.nav.links;
+  const navCta = landing.nav.cta;
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -43,7 +47,7 @@ export function Header() {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [pathname]);
+  }, [pathname, navLinks]);
 
   const isActive = (href: string) => {
     const { path, hash } = splitHref(href);

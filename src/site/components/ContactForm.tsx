@@ -2,8 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { projectTypes } from "../content";
-import { site } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 import styles from "./ContactForm.module.css";
 import s from "../Site.module.css";
 
@@ -21,6 +20,9 @@ type Fields = {
 const empty: Fields = { name: "", email: "", company: "", projectType: "", details: "", website: "" };
 
 export function ContactForm() {
+  const landing = useLanding();
+  const projectTypes = landing.contact.projectTypes;
+  const site = landing.site;
   const [f, setF] = useState<Fields>(empty);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);

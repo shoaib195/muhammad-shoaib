@@ -1,11 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { footerLinks, site, socials } from "../data";
+import { useLanding } from "../cms/CmsProvider";
 import { SmartLink } from "./SmartLink";
 import styles from "./Footer.module.css";
 
 export function Footer() {
+  const landing = useLanding();
+  const { site, socials } = landing;
+  const footerLinks = landing.footer.links;
   const year = new Date().getFullYear();
   const linkedin = socials.find((x) => x.label === "LinkedIn")?.href ?? "#";
   const whatsapp = `https://wa.me/${site.phone.replace(/[^\d]/g, "")}`;

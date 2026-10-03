@@ -54,3 +54,29 @@ public/
 - Email: shoaib.octachat@gmail.com
 - LinkedIn: [mdshoaib195](https://www.linkedin.com/in/mdshoaib195/)
 - Location: Karachi, Pakistan
+
+## Admin panel
+
+Protected CMS at `/admin` (Neon Postgres).
+
+1. Create a Neon DB and set in `.env`:
+
+```ash
+DATABASE_URL="postgresql://..."
+ADMIN_SESSION_SECRET="long-random-secret"
+```
+
+2. Push schema + seed default admin + portfolio data:
+
+```ash
+npm run db:setup
+```
+
+3. Open [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
+
+Default admin:
+
+- **Email:** shoaib.octachat@gmail.com
+- **Password:** Admin123@@
+
+Admin areas: Dashboard, Projects, Experience, Settings, Messages.

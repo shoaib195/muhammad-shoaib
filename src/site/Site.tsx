@@ -16,6 +16,9 @@ import { Contact } from "./components/Contact";
 import { CTA } from "./components/CTA";
 import { Footer } from "./components/Footer";
 import { ThemeProvider, useTheme } from "./theme";
+import { CmsProvider } from "./cms/CmsProvider";
+import type { LandingContent, ExperienceItem } from "./cms/types";
+import type { Project } from "./projects";
 import styles from "./Site.module.css";
 
 const BG = { dark: "#08090b", light: "#fbfaf9" } as const;
@@ -52,29 +55,42 @@ function Shell({ children }: { children: ReactNode }) {
       <Header />
       {children}
       <Footer />
-      {/* Portal target for dialogs: inside .site so theme tokens apply, outside <main> stacking context */}
       <div id="ms-modal-root" />
     </div>
   );
 }
 
-/** Theme + chrome (header/footer/smooth scroll) shared by every route. */
-export function SiteShell({ children }: { children: ReactNode }) {
+export function SiteShell({
+  children,
+  landing,
+  projects = [],
+  experiences = [],
+}: {
+  children: ReactNode;
+  landing: LandingContent;
+  projects?: Project[];
+  experiences?: ExperienceItem[];
+}) {
   return (
     <ThemeProvider>
-      <Shell>{children}</Shell>
+      <CmsProvider landing={landing} projects={projects} experiences={experiences}>
+        <Shell>{children}</Shell>
+      </CmsProvider>
     </ThemeProvider>
   );
 }
 
-/**
- * The single-page home. Flow:
- * Hero → Stats → Judgment → What I bring → Every interface breaks →
- * Selected work → Experience → Process → About → Contact → Final CTA
- */
-export function Site() {
+export function Site({
+  landing,
+  projects,
+  experiences,
+}: {
+  landing: LandingContent;
+  projects: Project[];
+  experiences: ExperienceItem[];
+}) {
   return (
-    <SiteShell>
+    <SiteShell landing={landing} projects={projects} experiences={experiences}>
       <main className={styles.main}>
         <Hero />
         <Stats />

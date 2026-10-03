@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id         String   @id
+  name       String
+  tagline    String   @default("")
+  category   String   @default("")
+  challenge  String   @default("")
+  platform   String   @default("Web")
+  period     String   @default("")
+  company    String   @default("")
+  cover      String   @default("/v2/w1.jpg")
+  images     String[] @default([])
+  overview   String   @default("")
+  what       String   @default("")
+  role       String[] @default([])
+  tech       String[] @default([])
+  features   String[] @default([])
+  impact     String[] @default([])
+  liveUrl    String?
+  sourceUrl  String?
+  status     String?
+  sortOrder  Int      @default(0)
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Experience {
+  id        String   @id @default(cuid())
+  role      String
+  company   String
+  years     String   @default("")
+  summary   String   @default("")
+  highlights String[] @default([])
+  stack     String[] @default([])
+  outcomes  String[] @default([])
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  company     String?
+  projectType String?
+  details     String
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
