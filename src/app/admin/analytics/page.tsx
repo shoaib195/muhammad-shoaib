@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { getAdminSession } from "@/lib/auth";
 import { AdminShell } from "@/admin/AdminShell";
-import { DashboardAnalytics } from "@/admin/DashboardAnalytics";
+import { AnalyticsPanel } from "@/admin/AnalyticsPanel";
+import styles from "@/admin/admin.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -18,9 +20,14 @@ export default async function AdminAnalyticsPage() {
     <AdminShell
       email={session.email}
       title="Analytics"
-      subtitle="Country, IPv4, browser, OS/device, and page path. Exclude your own tests in Settings."
+      subtitle="Filter traffic by range and view — exclude your own tests in Settings"
+      actions={
+        <Link href="/admin/visits" className={styles.btn}>
+          Visit history
+        </Link>
+      }
     >
-      <DashboardAnalytics />
+      <AnalyticsPanel />
     </AdminShell>
   );
 }

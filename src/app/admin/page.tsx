@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getAdminSession } from "@/lib/auth";
 import { AdminShell } from "@/admin/AdminShell";
-import { DashboardAnalytics } from "@/admin/DashboardAnalytics";
+import { DashboardHome } from "@/admin/DashboardHome";
 import styles from "@/admin/admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -20,14 +20,14 @@ export default async function AdminDashboardPage() {
     <AdminShell
       email={session.email}
       title="Dashboard"
-      subtitle="Live traffic, pages, countries and inbox pulse"
+      subtitle="Traffic pulse, top projects and latest leads"
       actions={
-        <Link href="/admin/analytics" className={`${styles.btn} ${styles.btnDark}`}>
-          Full analytics
+        <Link href="/admin/visits" className={`${styles.btn} ${styles.btnDark}`}>
+          Visit history
         </Link>
       }
     >
-      <DashboardAnalytics />
+      <DashboardHome />
     </AdminShell>
   );
 }

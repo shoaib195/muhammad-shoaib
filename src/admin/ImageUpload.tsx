@@ -75,7 +75,7 @@ export function ImageUpload({ label, value, onChange, folder = "general", hint }
             className={styles.input}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="/uploads/..."
+            placeholder="/media/... or https://....blob.vercel-storage.com/..."
           />
           {error ? <p className={styles.error}>{error}</p> : null}
         </div>

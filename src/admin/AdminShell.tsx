@@ -9,6 +9,7 @@ import styles from "./admin.module.css";
 const links = [
   { href: "/admin", label: "Dashboard", exact: true, icon: "M3 12l9-9 9 9M5 10v10h14V10" },
   { href: "/admin/analytics", label: "Analytics", icon: "M4 19V5M4 19h16M8 16V9M12 16V7M16 16v-4" },
+  { href: "/admin/visits", label: "Visits", icon: "M3 4h18M5 8h14v12H5zM9 12h6" },
   { href: "/admin/landing", label: "Landing", icon: "M4 6h16M4 12h10M4 18h14" },
   { href: "/admin/projects", label: "Projects", icon: "M4 7h16v12H4zM8 7V5h8v2" },
   { href: "/admin/experience", label: "Experience", icon: "M8 7V5h8v2M4 7h16v12H4z" },
